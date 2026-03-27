@@ -1,14 +1,14 @@
-package com.odtheking.odinaddon
+package com.tcmanna.tcsaddon
 
 import com.odtheking.odin.config.ModuleConfig
 import com.odtheking.odin.events.core.EventBus
 import com.odtheking.odin.features.ModuleManager
-import com.odtheking.odinaddon.commands.odinAddonCommand
-import com.odtheking.odinaddon.features.impl.skyblock.TestModule
+import com.tcmanna.tcsaddon.commands.odinAddonCommand
+import com.tcmanna.tcsaddon.features.impl.skyblock.TestModule
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 
-object OdinAddon : ClientModInitializer {
+object TCsAddon : ClientModInitializer {
 
     override fun onInitializeClient() {
         println("Odin Addon initialized!")
@@ -22,6 +22,6 @@ object OdinAddon : ClientModInitializer {
         listOf(this).forEach { EventBus.subscribe(it) }
 
         // Register modules by adding to the list
-        ModuleManager.registerModules(ModuleConfig("OdinAddon.json"), TestModule)
+        ModuleManager.registerModules(ModuleConfig("TCsAddon.json"), TestModule)
     }
 }

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "odinaddon",
+  "id": "tcsaddon",
   "version": "${version}",
-  "name": "OdinAddon",
+  "name": "TCsAddon",
   "description": "",
   "authors": [],
   "contact": {},
@@ -13,12 +13,12 @@
     "client": [
       {
         "adapter": "kotlin",
-        "value": "com.odtheking.odinaddon.OdinAddon"
+        "value": "com.tcmanna.tcsaddon.TCsAddon"
       }
     ]
   },
   "mixins": [
-    "odinaddon.mixins.json"
+    "tcsaddon.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",

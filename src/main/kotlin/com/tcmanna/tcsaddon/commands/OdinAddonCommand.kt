@@ -1,4 +1,4 @@
-package com.odtheking.odinaddon.commands
+package com.tcmanna.tcsaddon.commands
 
 import com.github.stivais.commodore.Commodore
 import com.github.stivais.commodore.utils.GreedyString

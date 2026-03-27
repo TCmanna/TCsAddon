@@ -1,4 +1,4 @@
-package com.odtheking.odinaddon.features.impl.skyblock
+package com.tcmanna.tcsaddon.features.impl.skyblock
 
 import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.ActionSetting
