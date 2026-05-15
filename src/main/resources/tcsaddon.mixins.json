@@ -4,6 +4,7 @@
   "package": "com.tcmanna.tcsaddon.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "MixinLevelChunk"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -12,5 +13,10 @@
     "requireAnnotations": true
   },
   "client": [
+    "MixinClientLevel",
+    "MixinEntityRenderer",
+    "MixinMouseHandler",
+    "accessors.KeyMappingAccessor",
+    "accessors.MultiPlayerGameModeAccessor"
   ]
 }

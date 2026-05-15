@@ -43,8 +43,7 @@ loom {
             arrayOf(
                 "-Dmixin.debug.export=true",
                 "-Ddevauth.enabled=true",
-                "-Ddevauth.account=main",
-                "-XX:+AllowEnhancedClassRedefinition"
+                "-Ddevauth.account=main"
             )
         )
     }
@@ -62,6 +61,7 @@ afterEvaluate {
 
 tasks {
     processResources {
+        outputs.upToDateWhen { false }
         filesMatching("fabric.mod.json") {
             expand(getProperties())
         }
