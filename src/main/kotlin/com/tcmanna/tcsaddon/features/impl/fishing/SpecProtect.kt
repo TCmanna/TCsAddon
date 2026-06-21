@@ -15,9 +15,7 @@ import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.playSoundAtPlayer
 import com.tcmanna.tcsaddon.TCsAddon
 import com.tcmanna.tcsaddon.utils.Utils
-import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.screens.ChatScreen
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
@@ -29,7 +27,6 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import org.lwjgl.glfw.GLFW
-import kotlin.random.Random
 
 object SpecProtect : Module(
     name = "Spec Protect",
@@ -45,6 +42,8 @@ object SpecProtect : Module(
     private val strictModeDropdown by DropdownSetting("Strict Mode Setting").withDependency { strictMode }
     private val positionCheck by BooleanSetting("Position Check", true, "").withDependency { strictModeDropdown && strictMode }
     private val rotationCheck by BooleanSetting("Rotation Check", true, "").withDependency { strictModeDropdown && strictMode }
+    private val longCatchCheck by BooleanSetting("LongCatch Check", true, "").withDependency { strictModeDropdown && strictMode }
+    private val longCatchSetting by NumberSetting("LongCatch Threshold", 30L, 5L, 100L, 1, "", "sec").withDependency { strictModeDropdown && strictMode && longCatchCheck }
 
     private val playerClose by DropdownSetting("Player Close")
     private val playerCheck by BooleanSetting("Enable Close Check", true, "Use </tca friend> to add friend list.")
@@ -65,8 +64,7 @@ object SpecProtect : Module(
     private var startRot : Vec2? = null
     private val startBlockList = ArrayList<Block>()
     private var startHotbar : Int? = null
-
-    private var anvilSound = 0
+    private var enableTime = 0L
 
     init {
         on<TickEvent.End> {
@@ -74,18 +72,27 @@ object SpecProtect : Module(
 
             val zombieHorseAround = zombieHorseAround()
 
-            if (strictMode && positionCheck && !RandomMove.isJumping && !zombieHorseAround) {
-                if (startVec != null && startVec != mc.player?.position()) {
-                    triggerStaffCheck("Position Change")
-                    return@on
+            if (strictMode) {
+                if (positionCheck && !RandomMove.isJumping && !zombieHorseAround) {
+                    if (startVec != null && startVec != mc.player?.position()) {
+                        triggerStaffCheck("Position Change")
+                        return@on
+                    }
                 }
-            }
-            if (strictMode && rotationCheck && !RandomMove.isAFKing) {
-                if (startRot != null) {
-                    val xeq = startRot!!.x == mc.player!!.rotationVector.x
-                    val yeq = startRot!!.y == mc.player!!.rotationVector.y
-                    if (!xeq || !yeq) {
-                        triggerStaffCheck("Rotate Change")
+                if (rotationCheck && !RandomMove.isAFKing) {
+                    if (startRot != null) {
+                        val xeq = startRot!!.x == mc.player!!.rotationVector.x
+                        val yeq = startRot!!.y == mc.player!!.rotationVector.y
+                        if (!xeq || !yeq) {
+                            triggerStaffCheck("Rotate Change")
+                            return@on
+                        }
+                    }
+                }
+                if (longCatchCheck) {
+                    if (System.currentTimeMillis() - enableTime < 60000) return@on
+                    if (System.currentTimeMillis() - AutoFish.mill > longCatchSetting * 1000) {
+                        triggerStaffCheck("Catch Time to Long")
                         return@on
                     }
                 }
@@ -154,20 +161,24 @@ object SpecProtect : Module(
         onReceive<ClientboundPlayerPositionPacket> {
             if (!packetMove) return@onReceive
             if (zombieHorseAround()) return@onReceive
+            val player = mc.player?: return@onReceive
 
-            val posChanged = if (mc.player?.position() != change.position)
-                "Position: ${mc.player?.position()} -> ${change.position}" else ""
+            val posChanged = if (player.position() != change.position)
+                "Position: ${player.position()} -> ${change.position}" else ""
 
-            val yawChanged = if (mc.player?.xRot != change.xRot)
-                " Yaw: ${mc.player?.xRot} -> ${change.xRot}" else ""
+            val yawChanged = if (player.xRot != change.xRot)
+                " Yaw: ${player.xRot} -> ${change.xRot}" else ""
 
-            val pitchChanged = if (mc.player?.yRot != change.yRot)
-                " Pitch: ${mc.player?.yRot} -> ${change.yRot}" else ""
+            val pitchChanged = if (player.yRot != change.yRot)
+                " Pitch: ${player.yRot} -> ${change.yRot}" else ""
 
             if (posChanged.isEmpty() && yawChanged.isEmpty() && pitchChanged.isEmpty())
                 return@onReceive
-            if (posChanged.isEmpty() && change.xRot == 0.0f && change.yRot == 0.0f)
-                return@onReceive
+            if (posChanged.isEmpty() && change.xRot == 0.0f && change.yRot == 0.0f) {
+                if (player.xRot != 0.0f && player.yRot != 0.0f) {
+                    return@onReceive
+                }
+            }
 
             triggerStaffCheck("Move Packet [$posChanged$yawChanged$pitchChanged]")
         }
@@ -189,7 +200,7 @@ object SpecProtect : Module(
             return
         }
         if (!AutoFish.enabled) AutoFish.onKeybind()
-
+        enableTime = System.currentTimeMillis()
         startVec = mc.player?.position()
         startRot = mc.player?.rotationVector
         startHotbar = mc.player?.inventory?.selectedSlot

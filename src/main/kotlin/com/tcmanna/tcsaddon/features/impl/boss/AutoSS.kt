@@ -37,9 +37,10 @@ object AutoSS: Module(
     name = "Auto SS",
     description = "Automatically completes Simon says device."
 ) {
+    private val autoSkip by BooleanSetting("Auto Skip", true, "")
     private val auto by BooleanSetting("Enable Auto", true, "")
     private val delay by NumberSetting("Delay", 360f, 50f, 500f, 10f, "Click delay", unit = "ms").withDependency { auto }
-    private val startDelay by NumberSetting("Start delay", 200, 50, 300, 1, "Delay between clicks when skipping a button.", unit = "ms").withDependency { auto }
+    private val startDelay by NumberSetting("Start delay", 140, 50, 300, 1, "Delay between clicks when skipping a button.", unit = "ms").withDependency { auto }
     private val smoothRotate by BooleanSetting("Smooth rotate", true, "").withDependency { auto }
     private val rotateStyle by SelectorSetting("Style", Animation.Style.EaseInOutQuint.name, Animation.Style.entries.map { it.name }.toList(), "").withDependency { smoothRotate }
 
@@ -63,6 +64,7 @@ object AutoSS: Module(
     private var nextActionTime = 0L
     private var lastManualReset = 0L
     private var startTime = 0L
+    private var startTick = 0
 
     init {
         on<WorldEvent.Load> {
@@ -84,6 +86,8 @@ object AutoSS: Module(
                     it.distanceTo(player) < 6 && it.displayName.string.contains("Device Active")
                 }.isNotEmpty()
                 if (isActive) return@on
+
+                if (!autoSkip) return@on
 
                 if (System.currentTimeMillis() - lastManualReset > 500) {
                     if (auto) {
@@ -144,27 +148,44 @@ object AutoSS: Module(
         on<TickEvent.Start> {
             val player = mc.player?: return@on
             if (startActive) {
-                if (!auto) {
+                if (!auto || !autoSkip) {
                     doingSS = true
                     startTime = System.currentTimeMillis()
                     startActive = false
-                } else if (System.currentTimeMillis() >= nextActionTime) {
+                }
+                else if (System.currentTimeMillis() >= nextActionTime) {
                     when (startStep) {
-                        0, 1 -> {
-                            reset()
-                            clickButton(startButton)
-
-                            val waitMs = Random.nextInt(startDelay, (startDelay * 1.136).toInt())
-                            nextActionTime = System.currentTimeMillis() + waitMs
+                        0 -> {
+                            player.rotateSmoothly(
+                                getDirection(startButton.randomVec),
+                                duration = delay,
+                                style = Animation.Style.getFromIndex(rotateStyle)
+                            ) {
+                                startTick = 9
+                            }
                             startStep++
                         }
-                        2 -> {
-                            clickButton(startButton)
-                            doingSS = true
-                            startTime = System.currentTimeMillis()
-                            startActive = false
+
+                        1, 2 -> {
+                            if (startTick > 0 && startTick % 3 == 0) {
+                                reset()
+                                clickButton(startButton, 0f)
+
+                                startStep++
+                            }
                         }
+
+                        3 -> {
+                            if (startTick > 0 && startTick % 3 == 0) {
+                                clickButton(startButton, 0f)
+                                doingSS = true
+                                startTime = System.currentTimeMillis()
+                                startActive = false
+                            }
+                        }
+
                     }
+                    if (startTick > 0) startTick--
                 }
                 return@on
             }
@@ -250,7 +271,7 @@ object AutoSS: Module(
         }
     }
 
-    private fun clickButton(pos: BlockPos) {
+    private fun clickButton(pos: BlockPos, d: Float = delay) {
         val player = mc.player?: return
         if (player.distanceToSqr(pos.center) > 25) return
 
@@ -260,7 +281,7 @@ object AutoSS: Module(
 
         if (shouldSmooth) {
 
-            player.rotateSmoothly(getDirection(pos.randomVec), duration = delay, style = Animation.Style.getFromIndex(rotateStyle)) {
+            player.rotateSmoothly(getDirection(pos.randomVec), duration = d, style = Animation.Style.getFromIndex(rotateStyle)) {
                 if (player.distanceToSqr(pos.center) > 25) return@rotateSmoothly
                 clickedButton = pos
                 AuraManager.interactBlock(pos)

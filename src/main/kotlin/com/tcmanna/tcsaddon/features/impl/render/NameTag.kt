@@ -32,6 +32,7 @@ object NameTag : Module(
     private val scaleSetting by NumberSetting("Scale", 0.8, 0.1, 2.0, 0.1, "")
     private val maxSetting by NumberSetting("MaxRender", 0.0, 0.0, 100.0, 1.0, "")
     private val rangeSetting by NumberSetting("Range", 0.0, 0.0, 512.0, 1.0, "")
+    private val posAdjustment by NumberSetting("Pos Adjust", 0.0f, -5.0f, 5.0f, 0.1f, "")
 
     private val r by NumberSetting("Red", 20.0, 0.0, 255.0, 5.0, "")
     private val g by NumberSetting("Green", 20.0, 0.0, 255.0, 5.0, "")
@@ -82,7 +83,7 @@ object NameTag : Module(
 
                 val renderText = "$name  ${getHealthColor(health)}$healthStr"
 
-                drawText(renderText, target.renderPos.addVec(y = target.bbHeight + 0.5), finalScale, false)
+                drawText(renderText, target.renderPos.addVec(y = target.bbHeight + 0.5 + posAdjustment), finalScale, false)
             }
 
         }
@@ -134,7 +135,7 @@ object NameTag : Module(
         val camPos = camera.position()
 
         val x = player.renderX - camPos.x
-        val y = player.renderY + player.bbHeight + 0.5 - camPos.y
+        val y = player.renderY + player.bbHeight + 0.5 + posAdjustment - camPos.y
         val z = player.renderZ - camPos.z
 
         pose.pushPose()

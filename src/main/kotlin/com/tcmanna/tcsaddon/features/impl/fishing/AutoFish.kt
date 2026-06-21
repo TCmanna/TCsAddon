@@ -3,7 +3,6 @@ package com.tcmanna.tcsaddon.features.impl.fishing
 import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
-import com.odtheking.odin.events.RenderEvent
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.WorldEvent
 import com.odtheking.odin.events.core.on
@@ -16,9 +15,6 @@ import com.tcmanna.tcsaddon.utils.Utils
 import com.tcmanna.tcsaddon.events.AutoFishingEvent
 import com.tcmanna.tcsaddon.events.FishingHookedEvent
 import com.tcmanna.tcsaddon.events.PlaySoundEvent
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
-import net.minecraft.client.gui.GuiGraphics
-import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.decoration.ArmorStand
@@ -88,7 +84,7 @@ object AutoFish : Module(
             lastTime = System.currentTimeMillis() - mill
             if (mc.isPaused || mc.player == null || !stateCheck) return@on
             checkDelay = (checkDelay + 1) % 100000
-            val thePlayer = mc.player!!
+            val thePlayer = mc.player?: return@on
             if (checkDelay % (checkDelaySetting * 20) == 0 && checkDelay != 0 && Utils.playerHoldFishRod(thePlayer)) {
                 if (lastTime < 5000) return@on
                 //check has entity
