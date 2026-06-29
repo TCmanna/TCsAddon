@@ -28,6 +28,7 @@ object AutoFish : Module(
     category = Category.custom("Fishing"),
     description = "Auto Fishing."
 ) {
+    val packetClick by BooleanSetting("Packet Click", true, "")
     private val slugfishMode by BooleanSetting("Slug Mode", false, "")
     private val withSlugPet by BooleanSetting("With Slug Pet", true, "").withDependency { slugfishMode }
     private val reThrowCooldown by NumberSetting("ReThrow Time", 350L, 100L, 1000L, 50L, "")
@@ -91,7 +92,7 @@ object AutoFish : Module(
                 if (thePlayer.fishing == null) {
                     executor.schedule({
                         if (thePlayer.fishing == null && Utils.playerHoldFishRod(thePlayer)) 
-                            Utils.playerUseHeldItem(thePlayer)
+                            Utils.playerUseHeldItem(thePlayer, packetClick)
                     }, 2000L, TimeUnit.MILLISECONDS)
                 }
 
@@ -99,7 +100,7 @@ object AutoFish : Module(
                 if (thePlayer.fishing?.inLiquid() == false) {
                     executor.schedule({
                         if (thePlayer.fishing?.inLiquid() == false)
-                            Utils.playerUseHeldItem(thePlayer)
+                            Utils.playerUseHeldItem(thePlayer, packetClick)
                     }, 2000L, TimeUnit.MILLISECONDS)
                 }
 
@@ -114,11 +115,11 @@ object AutoFish : Module(
                     } else {
                         executor.schedule({
                             if (thePlayer.fishing?.hookedIn != null && Utils.playerHoldFishRod(thePlayer))
-                                Utils.playerUseHeldItem(thePlayer)
+                                Utils.playerUseHeldItem(thePlayer, packetClick)
                         }, 2000L, TimeUnit.MILLISECONDS)
                         executor.schedule({
                             if (thePlayer.fishing?.hookedIn != null && Utils.playerHoldFishRod(thePlayer))
-                                Utils.playerUseHeldItem(thePlayer)
+                                Utils.playerUseHeldItem(thePlayer, packetClick)
                         }, 2500L, TimeUnit.MILLISECONDS)
                     }
                 }
@@ -138,11 +139,11 @@ object AutoFish : Module(
                 else {
                     isReThrow = true
                     executor.schedule({
-                        if (Utils.playerHoldFishRod(mc.player)) Utils.playerUseHeldItem(mc.player)
+                        if (Utils.playerHoldFishRod(mc.player)) Utils.playerUseHeldItem(mc.player, packetClick)
                     }, 200, TimeUnit.MILLISECONDS)
                     executor.schedule({
                         if (Utils.playerHoldFishRod(mc.player)) {
-                            Utils.playerUseHeldItem(mc.player)
+                            Utils.playerUseHeldItem(mc.player, packetClick)
                         }
                         isReThrow = false
                     }, 400, TimeUnit.MILLISECONDS)
@@ -155,7 +156,7 @@ object AutoFish : Module(
     override fun onEnable() {
         super.onEnable()
         isReThrow = false
-        if (mc.player?.fishing == null && Utils.playerHoldFishRod(mc.player)) Utils.playerUseHeldItem(mc.player)
+        if (mc.player?.fishing == null && Utils.playerHoldFishRod(mc.player)) Utils.playerUseHeldItem(mc.player, packetClick)
     }
 
     fun runAutoFish() {
@@ -165,11 +166,11 @@ object AutoFish : Module(
             if (fishingBefore) return
 
             executor.schedule({
-                if (Utils.playerHoldFishRod(player)) Utils.playerUseHeldItem(player)
+                if (Utils.playerHoldFishRod(player)) Utils.playerUseHeldItem(player, packetClick)
                 executor.schedule({
                         val fishingAfter = AutoFishingEvent.After().postAndCatch()
                         if (fishingAfter) return@schedule
-                        if (Utils.playerHoldFishRod(player)) Utils.playerUseHeldItem(player)
+                        if (Utils.playerHoldFishRod(player)) Utils.playerUseHeldItem(player, packetClick)
                     }, reThrowCooldown, TimeUnit.MILLISECONDS
                 )
             }, 100, TimeUnit.MILLISECONDS)

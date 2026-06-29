@@ -1,5 +1,7 @@
 package com.tcmanna.tcsaddon.utils
 
+import com.tcmanna.tcsaddon.mixin.accessors.KeyMappingAccessor
+import net.minecraft.client.KeyMapping
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.minecraft.world.InteractionHand
@@ -17,14 +19,18 @@ object Utils {
         return player.mainHandItem.item == Items.FISHING_ROD
     }
 
-    fun playerUseHeldItem(player: LocalPlayer?) {
+    fun playerUseHeldItem(player: LocalPlayer?, packetClick: Boolean) {
         if (player == null) return
         if (player.mainHandItem.item is AirItem || mc.gameMode == null) return
 
-        mc.execute({
-            mc.gameMode!!.useItem(player, InteractionHand.MAIN_HAND)
-            if (player.mainHandItem.item == Items.FISHING_ROD) player.swing(InteractionHand.MAIN_HAND)
-        })
+        mc.execute {
+            if (packetClick) {
+                mc.gameMode!!.useItem(player, InteractionHand.MAIN_HAND)
+                if (player.mainHandItem.item == Items.FISHING_ROD) player.swing(InteractionHand.MAIN_HAND)
+            } else {
+                realRightClick()
+            }
+        }
     }
 
     fun getTextWithoutFormattingCodes(text: String): String {
@@ -38,5 +44,13 @@ object Utils {
         if (player.containerMenu !== player.inventoryMenu) player.closeContainer()
 
         else mc.setScreen(null)
+    }
+
+    fun realRightClick() {
+        val options = mc.options
+        val key = (options.keyUse as KeyMappingAccessor).boundKey
+        KeyMapping.set(key, true)
+        KeyMapping.click(key)
+        KeyMapping.set(key, false)
     }
 }

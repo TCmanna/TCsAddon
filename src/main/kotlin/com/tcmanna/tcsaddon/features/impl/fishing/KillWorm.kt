@@ -105,14 +105,14 @@ object KillWorm : Module(
 
 
             Thread.sleep(500)
-            mc.execute { Utils.playerUseHeldItem(mc.player) }
+            mc.execute { Utils.playerUseHeldItem(mc.player, AutoFish.packetClick) }
 
             Thread.sleep(500)
             mc.execute { mc.player?.let { it.getInventory().selectedSlot = lastSlot } }
 
             Thread.sleep(500)
             if (Utils.playerHoldFishRod(mc.player)) {
-                mc.execute { Utils.playerUseHeldItem(mc.player) }
+                mc.execute { Utils.playerUseHeldItem(mc.player, AutoFish.packetClick) }
             }
             kill = false
         }

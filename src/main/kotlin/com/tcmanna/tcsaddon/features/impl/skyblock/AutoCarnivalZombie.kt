@@ -52,7 +52,7 @@ object AutoCarnivalZombie : Module(
             val (yaw, pitch) = calcYawPitch(currentTarget)?: return@on
             snapTo(yaw, pitch)
 
-            mc.execute { Utils.playerUseHeldItem(player) }
+            mc.execute { Utils.playerUseHeldItem(player, true) }
             lastClick = now
         }
     }

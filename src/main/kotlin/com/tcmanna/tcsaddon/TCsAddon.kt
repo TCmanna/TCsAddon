@@ -2,6 +2,7 @@ package com.tcmanna.tcsaddon
 
 import com.odtheking.odin.config.ModuleConfig
 import com.odtheking.odin.events.core.EventBus
+import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.ModuleManager
 import com.tcmanna.tcsaddon.commands.odinAddonCommand
 import com.tcmanna.tcsaddon.events.FishingEventDispatcher
@@ -14,7 +15,9 @@ import com.tcmanna.tcsaddon.features.impl.render.CorpseESP
 import com.tcmanna.tcsaddon.features.impl.render.HideEntity
 import com.tcmanna.tcsaddon.features.impl.render.LittlefootESP
 import com.tcmanna.tcsaddon.features.impl.render.NameTag
+import com.tcmanna.tcsaddon.features.impl.rift.VampireSlayer
 import com.tcmanna.tcsaddon.features.impl.skyblock.AntiNick
+import com.tcmanna.tcsaddon.features.impl.skyblock.AutoBeachBall
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoCarnivalZombie
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoFusion
 import com.tcmanna.tcsaddon.features.impl.skyblock.LeftClicker
@@ -50,9 +53,10 @@ object TCsAddon : ClientModInitializer {
             LeftClicker, AutoFish, KillWorm, SpecProtect,
             Icant4, AutoCHPass, RandomMove, AutoSS, AntiNick,
             AutoCarnivalZombie, NameTag, HideEntity, AutoFusion,
-            ChestESP, CorpseESP, GoldenFishNotif, LittlefootESP
+            ChestESP, CorpseESP, GoldenFishNotif, LittlefootESP,
+            AutoBeachBall, VampireSlayer
         )
-        if (Minecraft.getInstance().gameProfile.name == "MC_tianci")
+        if (Minecraft.getInstance().gameProfile.name == "Paper_Flany")
             ModuleManager.registerModules(moduleConfig, Debug)
     }
 }

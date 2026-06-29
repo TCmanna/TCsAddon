@@ -1,15 +1,13 @@
 package com.tcmanna.tcsaddon.features.impl.fishing
 
+import com.odtheking.odin.events.PacketEvent
+import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.noControlCodes
-import com.odtheking.odin.utils.skyblock.LocationUtils
-import com.tcmanna.tcsaddon.features.impl.render.CorpseESP
-import com.tcmanna.tcsaddon.features.impl.render.CorpseESP.Corpse
-import com.tcmanna.tcsaddon.features.impl.render.LittlefootESP.SKIN
-import com.tcmanna.tcsaddon.features.impl.render.LittlefootESP.getEntityTextureString
-import net.minecraft.world.entity.EquipmentSlot
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket
 
 //nan
 object Debug : Module(
@@ -17,12 +15,18 @@ object Debug : Module(
     category = Category.custom("Fishing"),
     description = "Test."
 ) {
-    override fun onEnable() {
-        super.onEnable()
+    private val bounceRegex = Regex("Bounces: (\\d{1,3})")
 
-        mc.level?.players()?.forEach {
-            modMessage(it.getEntityTextureString())
+    init {
+        on<PacketEvent.Receive> {
+            if (packet is ClientReceiveMessageEvents.ModifyGame) {
+                val text = (packet as ClientboundSetActionBarTextPacket).text.string.noControlCodes
+                modMessage(text)
+
+                val match = bounceRegex.find(text)
+
+                if (match != null) modMessage("b: " + match.groupValues[1].toInt())
+            }
         }
     }
-
 }
