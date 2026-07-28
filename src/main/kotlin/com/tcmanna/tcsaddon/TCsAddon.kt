@@ -4,14 +4,19 @@ import com.odtheking.odin.config.ModuleConfig
 import com.odtheking.odin.events.core.EventBus
 import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.ModuleManager
+import com.odtheking.odin.utils.ui.rendering.Font
 import com.tcmanna.tcsaddon.commands.odinAddonCommand
 import com.tcmanna.tcsaddon.events.FishingEventDispatcher
 import com.tcmanna.tcsaddon.events.core.CustomEventDispatcher
 import com.tcmanna.tcsaddon.features.impl.boss.AutoSS
 import com.tcmanna.tcsaddon.features.impl.boss.Icant4
+import com.tcmanna.tcsaddon.features.impl.boss.LeapMid
+import com.tcmanna.tcsaddon.features.impl.dungeon.LagTracker
+import com.tcmanna.tcsaddon.features.impl.dungeon.YqcLeapMenu
 import com.tcmanna.tcsaddon.features.impl.fishing.*
 import com.tcmanna.tcsaddon.features.impl.render.ChestESP
 import com.tcmanna.tcsaddon.features.impl.render.CorpseESP
+import com.tcmanna.tcsaddon.features.impl.render.DisablePranks
 import com.tcmanna.tcsaddon.features.impl.render.HideEntity
 import com.tcmanna.tcsaddon.features.impl.render.LittlefootESP
 import com.tcmanna.tcsaddon.features.impl.render.NameTag
@@ -27,12 +32,15 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.minecraft.client.Minecraft
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
+import java.io.File
 
 object TCsAddon : ClientModInitializer {
 
     //from polar
     val sound = Identifier.fromNamespaceAndPath("tcsaddon", "tave_check")
     val soundEvent = SoundEvent.createVariableRangeEvent(sound)
+    @JvmStatic
+    val systemFont = loadMicrosoftYaHei()
 
     override fun onInitializeClient() {
         println("Tcs Addon initialized!")
@@ -54,9 +62,17 @@ object TCsAddon : ClientModInitializer {
             Icant4, AutoCHPass, RandomMove, AutoSS, AntiNick,
             AutoCarnivalZombie, NameTag, HideEntity, AutoFusion,
             ChestESP, CorpseESP, GoldenFishNotif, LittlefootESP,
-            AutoBeachBall, VampireSlayer
+            AutoBeachBall, VampireSlayer, LagTracker, DisablePranks,
+            YqcLeapMenu, LeapMid
         )
-        if (Minecraft.getInstance().gameProfile.name == "Paper_Flany")
+        val debugUser = listOf("Paper_Flany", "MC_tianci", "TCmanna")
+        if (debugUser.contains(Minecraft.getInstance().gameProfile.name))
             ModuleManager.registerModules(moduleConfig, Debug)
+    }
+
+    @JvmStatic
+    fun loadMicrosoftYaHei(): Font {
+        val fontFile = File(System.getenv("WINDIR"), "Fonts/msyh.ttc")
+        return Font("Microsoft YaHei", fontFile.inputStream())
     }
 }

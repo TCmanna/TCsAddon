@@ -15,6 +15,12 @@
         "adapter": "kotlin",
         "value": "com.tcmanna.tcsaddon.TCsAddon"
       }
+    ],
+    "rei_client": [
+      {
+        "adapter": "kotlin",
+        "value": "com.tcmanna.tcsaddon.compat.rei.ScreenREIPlugin"
+      }
     ]
   },
   "mixins": [

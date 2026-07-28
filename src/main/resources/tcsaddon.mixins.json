@@ -2,9 +2,16 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.tcmanna.tcsaddon.mixin",
+  "plugin": "com.tcmanna.tcsaddon.mixin.MixinPlugin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MixinLevelChunk"
+    "MixinLevelChunk",
+    "noammaddons.MixinAutoSessionIdStealer",
+    "odin.MixinNVGRenderer",
+    "odin.MixinShenanigans",
+    "odinclient.MixinImportantFeature",
+    "skiesstarredlibrary.MixinAbstractWords",
+    "skiesstarredlibrary.MixinDonatorSize"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -15,6 +22,7 @@
   "client": [
     "MixinClientLevel",
     "MixinEntityRenderer",
+    "MixinMinecraft",
     "MixinMouseHandler",
     "accessors.KeyMappingAccessor",
     "accessors.MultiPlayerGameModeAccessor"

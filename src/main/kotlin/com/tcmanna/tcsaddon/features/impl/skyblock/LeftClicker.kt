@@ -45,6 +45,8 @@ object LeftClicker : Module(
             if (mc.screen != null && (mc.screen !is InventoryScreen) && (mc.screen !is ContainerScreen))
                 return@on
 
+            if (weaponOnly && !isPlayerHoldingWeapon()) return@on
+
             val isDown = GLFW.glfwGetMouseButton(mc.window.handle(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS
 
             if (!isDown && !leftDown) {
@@ -52,7 +54,6 @@ object LeftClicker : Module(
             }
 
             if (isDown || leftDown) {
-                if (weaponOnly && !isPlayerHoldingWeapon()) return@on
                 leftClickExecute(mc.options.keyAttack)
             }
         }

@@ -13,6 +13,7 @@ repositories {
     mavenCentral()
     maven("https://jitpack.io")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
+    maven("https://maven.architectury.dev")
 }
 
 dependencies {
@@ -23,7 +24,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
 
     modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
-    modImplementation("com.github.odtheking:odinfabric:${property("odin_version")}")
+    modImplementation("com.github.odtheking:odin:${property("odin_version")}")
 
     modImplementation("com.github.stivais:Commodore:${property("commodore_version")}")
 
@@ -34,6 +35,11 @@ dependencies {
             modImplementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
         }
     }
+
+    modCompileOnly("com.github.Noamm9:NoammAddons:1.2.0:cheat")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-fabric:21.11.814")
+    compileOnly("com.github.skies-starred.library:library-1.21.11:009")
+    compileOnly(files("libs/odin-client-0.2.3-r1+1.21.11.jar"))
 }
 
 loom {
