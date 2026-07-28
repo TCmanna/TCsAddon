@@ -26,17 +26,13 @@ dependencies {
     runtimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
     implementation("maven.modrinth:odin:${property("odin_version")}")
 
-    property("commodore_version").let {
-        implementation("com.github.stivais:Commodore:$it")
-        include("com.github.stivais:Commodore:$it")
-    }
+    implementation("com.github.stivais:Commodore:${property("commodore_version")}")
+
     property("minecraft_lwjgl_version").let { lwjglVersion ->
         implementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
-        include("org.lwjgl:lwjgl-nanovg:$lwjglVersion")
 
         listOf("windows", "linux", "macos", "macos-arm64").forEach { os ->
             implementation("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
-            include("org.lwjgl:lwjgl-nanovg:$lwjglVersion:natives-$os")
         }
     }
 
@@ -80,7 +76,7 @@ tasks {
     compileKotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_25
-            freeCompilerArgs.add("-Xlambdas=class") //Commodore
+            freeCompilerArgs.addAll(listOf("-Xlambdas=class")) //Commodore
         }
     }
 
