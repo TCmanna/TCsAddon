@@ -41,7 +41,7 @@ object AutoCarnivalZombie : Module(
 
             val player = mc.player ?: return@on
             val item = player.mainHandItem
-            val name = Utils.getTextWithoutFormattingCodes(item.displayName.string) ?: return@on
+            val name = Utils.getTextWithoutFormattingCodes(item.displayName.string)
             if (!name.contains("Dart")) return@on
 
             val targets = getTarget() ?: return@on

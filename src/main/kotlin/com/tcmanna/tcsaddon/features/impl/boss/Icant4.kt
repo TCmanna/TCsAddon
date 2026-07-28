@@ -131,8 +131,8 @@ object Icant4 : Module(
 
             // Find block index in our 3x3 grid
             var index = -1
-            for (i in 0..<BLOCKS.size) {
-                if (pos.x == BLOCKS[i][0] && pos.y == BLOCKS[i][1] && pos.z == BLOCKS[i][2]) {
+            for ((i, element) in BLOCKS.withIndex()) {
+                if (pos.x == element[0] && pos.y == element[1] && pos.z == element[2]) {
                     index = i
                     break
                 }
@@ -176,8 +176,7 @@ object Icant4 : Module(
 
 
             // Calculate yaw and pitch - EXACT from original
-            val angles: FloatArray? = calculateAim(pos, index, isTerminator)
-            if (angles == null) return@on
+            val angles: FloatArray = calculateAim(pos, index, isTerminator) ?: return@on
 
             val yaw = angles[0]
             val pitch = angles[1]
@@ -319,15 +318,15 @@ object Icant4 : Module(
                 1 -> {
                     val f1 = done.contains(index - 1) // Left neighbor done?
                     val f2 = done.contains(index + 1) // Right neighbor done?
-                    if (f1 && !f2) {
+                    targetX = if (f1 && !f2) {
                         // Left done, right not -> aim LEFT to hit middle + right
-                        targetX = position.x - 0.5
+                        position.x - 0.5
                     } else if (f2 && !f1) {
                         // Right done, left not -> aim RIGHT to hit middle + left
-                        targetX = position.x + 1.5
+                        position.x + 1.5
                     } else {
                         // Both or neither done -> random direction
-                        targetX = position.x + 0.5 + (if (Math.random() < 0.5) -1 else 1)
+                        position.x + 0.5 + (if (Math.random() < 0.5) -1 else 1)
                     }
                     targetY = (position.y + 1).toDouble()
                     targetZ = position.z.toDouble()

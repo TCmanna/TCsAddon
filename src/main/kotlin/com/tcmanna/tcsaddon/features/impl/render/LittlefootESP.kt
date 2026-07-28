@@ -1,10 +1,10 @@
 package com.tcmanna.tcsaddon.features.impl.render
 
+import com.odtheking.odin.clickgui.settings.impl.ColorSetting
 import com.odtheking.odin.events.RenderEvent
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
-import com.odtheking.odin.utils.Color
 import com.odtheking.odin.utils.Colors
 import com.odtheking.odin.utils.addVec
 import com.odtheking.odin.utils.render.drawStyledBox
@@ -19,6 +19,8 @@ object LittlefootESP: Module(
     name = "Littlefoot ESP",
     description = "ESP for Mineshaft mob Littlefoot."
 ) {
+    private val color by ColorSetting("color", Colors.MINECRAFT_GOLD, false, "")
+
     const val SKIN = "f2b33640bfb71557e0e1d852287263ceafc9bec205301acf046b7c29fe8cb37b"
     val littlefootList = ArrayList<Player>()
 
@@ -43,8 +45,8 @@ object LittlefootESP: Module(
             if (littlefootList.isEmpty()) return@on
 
             littlefootList.forEach {
-                drawStyledBox(it.renderBoundingBox, Colors.MINECRAFT_GOLD, 2, false)
-                drawTracer(it.renderPos.addVec(y = it.bbHeight.toDouble() / 2), Colors.MINECRAFT_GOLD, false)
+                drawStyledBox(it.renderBoundingBox, color, 2, false)
+                drawTracer(it.renderPos.addVec(y = it.bbHeight.toDouble() / 2), color, false)
             }
         }
     }

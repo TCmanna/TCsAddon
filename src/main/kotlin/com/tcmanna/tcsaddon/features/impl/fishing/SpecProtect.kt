@@ -150,7 +150,7 @@ object SpecProtect : Module(
         on<ChatPacketEvent> {
             if (dmCheck) {
                 if (value.startsWith("From ")) {
-                    if (!msgInfo.isEmpty()) {
+                    if (msgInfo.isNotEmpty()) {
                         if (value.contains(msgInfo)) triggerStaffCheck("Direct Message Contains [$msgInfo]")
                     }
                     else triggerStaffCheck("Any Direct Message [$msgInfo]")
@@ -245,7 +245,7 @@ object SpecProtect : Module(
         }
         else {
             Thread.startVirtualThread {
-                for (i in 0 until 10) {
+                repeat(10) {
                     mc.player?.let { mc.execute { playSoundAtPlayer(SoundEvents.ANVIL_PLACE) } }
                     Thread.sleep(100)
                 }

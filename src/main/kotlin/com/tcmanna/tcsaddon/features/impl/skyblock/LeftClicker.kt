@@ -4,13 +4,11 @@ import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.events.RenderEvent
 import com.odtheking.odin.events.core.on
-import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.Module
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.screens.inventory.ContainerScreen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
 import net.minecraft.world.item.BowItem
-import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.LiquidBlock
@@ -18,6 +16,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import org.lwjgl.glfw.GLFW
 import java.util.Random
+import kotlin.math.roundToInt
 
 object LeftClicker : Module(
     name = "Left Clicker",
@@ -103,7 +102,7 @@ object LeftClicker : Module(
     fun genLeftTimings() {
         val clickSpeed: Double =
             ranModuleVal(cpsMin, cpsMax, rand!!) + 0.4 * rand!!.nextDouble()
-        var delay = Math.round(1000.0 / clickSpeed).toInt().toLong()
+        var delay = (1000.0 / clickSpeed).roundToInt().toLong()
 
         if (System.currentTimeMillis() > this.leftk) {
             if (!this.leftn && rand!!.nextInt(100) >= 85) {
@@ -166,7 +165,7 @@ object LeftClicker : Module(
         if (currentEquippedItem == null) {
             return false
         } else {
-            val item: Item? = currentEquippedItem.item
+            val item = currentEquippedItem.item
             return item is BowItem || item == Items.WOODEN_SWORD ||
                     item == Items.STONE_SWORD || item == Items.IRON_SWORD ||
                     item == Items.GOLDEN_SWORD || item == Items.DIAMOND_SWORD ||

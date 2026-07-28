@@ -83,13 +83,13 @@ object YqcLeapMenu : Module(
     private val leapedRegex = Regex("You have teleported to (\\w{1,16})!")
     private val imageCacheMap = mutableMapOf<String, Int>()
 
-    const val cw = 300f
-    const val ch = 200f
-    const val bw = 600f
-    const val bh = 600f
-    const val gap = 30f
+    const val CW = 300f
+    const val CH = 200f
+    const val BW = 600f
+    const val BH = 600f
+    const val GAP = 30f
 
-    val b = min(bw, bh)
+    val b = min(BW, BH)
 
     data class Box(
         val left: Float,
@@ -101,11 +101,11 @@ object YqcLeapMenu : Module(
     )
 
     val boxes = listOf(
-        Box(-cw-bw-gap, -ch-bh-gap, -gap/2, -ch-gap, -cw/2, -ch + 50f), // top left
-        Box(gap/2, -ch-bh-gap, cw+bw+gap, -ch-gap, cw/2, -ch + 50f), // top right
-        Box(cw+gap, -ch, cw+bw+gap, ch+bh+gap, cw - 30f, 20f), // bottom right
-        Box(-cw, ch+gap, cw, ch+bh+gap, 0f, ch - 50f), // bottom middle
-        Box(-cw-bw-gap, -ch, -cw-gap, ch+bh+gap, -cw + 30f, 20f), // bottom left
+        Box(-CW-BW-GAP, -CH-BH-GAP, -GAP/2, -CH-GAP, -CW/2, -CH + 50f), // top left
+        Box(GAP/2, -CH-BH-GAP, CW+BW+GAP, -CH-GAP, CW/2, -CH + 50f), // top right
+        Box(CW+GAP, -CH, CW+BW+GAP, CH+BH+GAP, CW - 30f, 20f), // bottom right
+        Box(-CW, CH+GAP, CW, CH+BH+GAP, 0f, CH - 50f), // bottom middle
+        Box(-CW-BW-GAP, -CH, -CW-GAP, CH+BH+GAP, -CW + 30f, 20f), // bottom left
     )
 
     var leapTeammates: List<DungeonPlayer> = ArrayList(0)
@@ -165,7 +165,7 @@ object YqcLeapMenu : Module(
             )
         }
 
-        NVGPIPRenderer.Companion.draw(guiGraphics, 0, 0, guiGraphics.guiWidth(), guiGraphics.guiHeight()) {
+        NVGPIPRenderer.draw(guiGraphics, 0, 0, guiGraphics.guiWidth(), guiGraphics.guiHeight()) {
             NVGRenderer.translate(hw, hh)
             NVGRenderer.scale(scale, scale)
 
@@ -196,7 +196,7 @@ object YqcLeapMenu : Module(
                 (player.playerSkin?.body?.id() ?: mc.player?.skin?.body?.id())?.let { locationSkin ->
                     imageCacheMap.getOrPut(locationSkin.path) {
                         NVGRenderer.createNVGImage(
-                            (mc.textureManager?.getTexture(locationSkin)?.texture as? GlTexture)?.glId() ?: 0,
+                            (mc.textureManager.getTexture(locationSkin).texture as? GlTexture)?.glId() ?: 0,
                             64,
                             64
                         )

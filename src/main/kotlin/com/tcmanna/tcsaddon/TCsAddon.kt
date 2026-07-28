@@ -2,7 +2,6 @@ package com.tcmanna.tcsaddon
 
 import com.odtheking.odin.config.ModuleConfig
 import com.odtheking.odin.events.core.EventBus
-import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.ModuleManager
 import com.odtheking.odin.utils.ui.rendering.Font
 import com.tcmanna.tcsaddon.commands.odinAddonCommand

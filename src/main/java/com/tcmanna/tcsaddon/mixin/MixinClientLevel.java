@@ -20,7 +20,7 @@ public class MixinClientLevel {
     }
 
     @Inject(method = "playSound", at = @At("HEAD"))
-    private void onPlayerSound(double d, double e, double f, SoundEvent soundEvent, SoundSource soundSource, float g, float h, boolean bl, long l, CallbackInfo ci) {
-        new PlaySoundEvent(new Vec3(d, e, f), soundEvent, soundSource).postAndCatch();
+    private void onPlayerSound(double x, double y, double z, SoundEvent sound, SoundSource source, float volume, float pitch, boolean distanceDelay, long seed, CallbackInfo ci) {
+        new PlaySoundEvent(new Vec3(x, y, z), sound, source).postAndCatch();
     }
 }

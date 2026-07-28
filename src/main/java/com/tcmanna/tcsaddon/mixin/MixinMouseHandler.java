@@ -16,9 +16,9 @@ public class MixinMouseHandler {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void onMouseMove(long window, double mx, double my, CallbackInfo ci) {
-        if (checkShit(window)) return;
-        if (new MouseEvent.Move(mx, my).postAndCatch()) ci.cancel();
+    private void onMouseMove(long handle, double xpos, double ypos, CallbackInfo ci) {
+        if (checkShit(handle)) return;
+        if (new MouseEvent.Move(xpos, ypos).postAndCatch()) ci.cancel();
     }
 
     @Unique

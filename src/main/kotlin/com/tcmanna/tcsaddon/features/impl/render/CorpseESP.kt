@@ -74,19 +74,11 @@ object CorpseESP: Module(
         }
     }
 
-    enum class Corpse(helmetName: String, color: Color) {
+    enum class Corpse(val helmetName: String, val color: Color) {
         LAPIS("LAPIS ARMOR HELMET", Color.BLUE),
         UMBER("YOG HELMET", Color.orange),
         TUNGSTEN("MINERAL HELMET", Color.GRAY),
         VANGUARD("VANGUARD HELMET", Color.CYAN);
-
-        val helmetName: String
-        val color: Color
-
-        init {
-            this.helmetName = helmetName
-            this.color = color
-        }
 
         fun canShow(): Boolean {
             if (lapis && this == LAPIS) return true

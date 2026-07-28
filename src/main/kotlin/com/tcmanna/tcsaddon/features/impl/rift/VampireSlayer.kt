@@ -60,7 +60,7 @@ object VampireSlayer : Module(
 
             holyIce.tick(enabled = autoHolyIce, delayTicks = holyIceDelay)
 
-            melon.tick(enabled = autoMelon, threshold = melonHealth,)
+            melon.tick(enabled = autoMelon, threshold = melonHealth)
 
             subtitle.tick(jump = autoJump, sneak = autoSneak, click = autoClick)
         }

@@ -109,7 +109,7 @@ class HealingMelonController(private val queue: TickActionQueue) {
 
         val player = mc.player ?: return
         val health = player.health
-        val crossed = lastHealth > threshold && health <= threshold
+        val crossed = threshold in health..<lastHealth
 
         if (crossed && health < player.maxHealth) {
             queue.enqueue(UseItemSequence("Healing Melon"))

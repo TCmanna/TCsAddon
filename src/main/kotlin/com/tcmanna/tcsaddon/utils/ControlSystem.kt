@@ -11,13 +11,13 @@ object ControlSystem {
     private enum class Direction(
         val keys: Set<(net.minecraft.client.Options) -> KeyMapping>
     ) {
-        FORWARD(setOf({ it.keyUp })),
+        FORWARD(setOf { it.keyUp }),
         FORWARD_RIGHT(setOf({ it.keyUp }, { it.keyRight })),
-        RIGHT(setOf({ it.keyRight })),
+        RIGHT(setOf { it.keyRight }),
         BACK_RIGHT(setOf({ it.keyDown }, { it.keyRight })),
-        BACK(setOf({ it.keyDown })),
+        BACK(setOf { it.keyDown }),
         BACK_LEFT(setOf({ it.keyDown }, { it.keyLeft })),
-        LEFT(setOf({ it.keyLeft })),
+        LEFT(setOf { it.keyLeft }),
         FORWARD_LEFT(setOf({ it.keyUp }, { it.keyLeft }))
     }
 
