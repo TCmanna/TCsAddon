@@ -5,7 +5,7 @@ import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.*
 import com.odtheking.odin.events.ChatPacketEvent
 import com.odtheking.odin.events.TickEvent
-import com.odtheking.odin.events.WorldEvent
+import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.events.core.onReceive
 import com.odtheking.odin.features.Category
@@ -183,7 +183,7 @@ object SpecProtect : Module(
             triggerStaffCheck("Move Packet [$posChanged$yawChanged$pitchChanged]")
         }
 
-        on<WorldEvent.Load> {
+        on<LevelEvent.Load> {
             onKeybind()
         }
     }

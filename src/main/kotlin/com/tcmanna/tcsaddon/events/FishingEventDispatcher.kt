@@ -5,7 +5,7 @@ import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.utils.skyblock.LocationUtils
 import com.tcmanna.tcsaddon.utils.Utils
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientWorldEvents
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLevelEvents
 import net.minecraft.client.Minecraft
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.entity.projectile.FishingHook
@@ -21,7 +21,7 @@ object FishingEventDispatcher {
     var lastSoundTime: Long = 0
 
     init {
-        ClientWorldEvents.AFTER_CLIENT_WORLD_CHANGE.register { _, _ ->
+        ClientLevelEvents.AFTER_CLIENT_LEVEL_CHANGE.register { _, _ ->
             reset()
         }
 

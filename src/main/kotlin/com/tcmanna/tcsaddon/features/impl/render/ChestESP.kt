@@ -4,7 +4,7 @@ import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.ColorSetting
 import com.odtheking.odin.events.RenderEvent
 import com.odtheking.odin.events.TickEvent
-import com.odtheking.odin.events.WorldEvent
+import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.Color
@@ -12,8 +12,6 @@ import com.odtheking.odin.utils.render.drawFilledBox
 import com.odtheking.odin.utils.render.drawWireFrameBox
 import com.odtheking.odin.utils.skyblock.Island
 import com.odtheking.odin.utils.skyblock.LocationUtils
-import com.tcmanna.tcsaddon.mixin.accessors.KeyMappingAccessor
-import net.minecraft.client.KeyMapping
 import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.level.block.entity.ChestBlockEntity
@@ -83,7 +81,7 @@ object ChestESP: Module(
             }
         }
 
-        on<WorldEvent.Load> {
+        on<LevelEvent.Load> {
             chestCache.clear()
             renderList.clear()
         }

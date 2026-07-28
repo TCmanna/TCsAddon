@@ -5,13 +5,12 @@ import com.odtheking.odin.clickgui.settings.impl.ActionSetting
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.clickgui.settings.impl.SelectorSetting
-import com.odtheking.odin.events.BlockInteractEvent
 import com.odtheking.odin.events.BlockUpdateEvent
 import com.odtheking.odin.events.ChatPacketEvent
 import com.odtheking.odin.events.PacketEvent
 import com.odtheking.odin.events.RenderEvent
 import com.odtheking.odin.events.TickEvent
-import com.odtheking.odin.events.WorldEvent
+import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.modMessage
@@ -67,7 +66,7 @@ object AutoSS: Module(
     private var startTick = 0
 
     init {
-        on<WorldEvent.Load> {
+        on<LevelEvent.Load> {
             fullReset()
         }
 

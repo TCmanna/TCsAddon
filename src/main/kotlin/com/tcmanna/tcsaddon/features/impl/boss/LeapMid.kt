@@ -2,7 +2,7 @@ package com.tcmanna.tcsaddon.features.impl.boss
 
 import com.odtheking.odin.events.InputEvent
 import com.odtheking.odin.events.TickEvent
-import com.odtheking.odin.events.WorldEvent
+import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.skyblock.Island
@@ -43,7 +43,7 @@ object LeapMid: Module(
             }
         }
 
-        on<WorldEvent.Load> {
+        on<LevelEvent.Load> {
             leaped = false
         }
 

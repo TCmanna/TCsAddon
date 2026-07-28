@@ -3,7 +3,7 @@ package com.tcmanna.tcsaddon.features.impl.render
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.events.RenderEvent
 import com.odtheking.odin.events.TickEvent
-import com.odtheking.odin.events.WorldEvent
+import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.noControlCodes
@@ -68,7 +68,7 @@ object CorpseESP: Module(
             }
         }
 
-        on<WorldEvent.Load> {
+        on<LevelEvent.Load> {
             armorStands.clear()
             hidePos.clear()
         }

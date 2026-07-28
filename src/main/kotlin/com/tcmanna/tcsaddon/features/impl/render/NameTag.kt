@@ -1,7 +1,6 @@
 package com.tcmanna.tcsaddon.features.impl.render
 
 import com.mojang.blaze3d.pipeline.RenderPipeline
-import com.mojang.blaze3d.platform.DepthTestFunction
 import com.mojang.blaze3d.vertex.PoseStack
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
@@ -22,6 +21,7 @@ import net.minecraft.client.renderer.RenderPipelines
 import net.minecraft.client.renderer.rendertype.RenderSetup
 import net.minecraft.client.renderer.rendertype.RenderType
 import net.minecraft.world.entity.player.Player
+import java.util.Optional
 import kotlin.math.max
 
 object NameTag : Module(
@@ -91,8 +91,8 @@ object NameTag : Module(
         on<RenderEvent.Last>(priority = 10) {
             val player = mc.player ?: return@on
             val camera = mc.gameRenderer.mainCamera
-            val pose = context.matrices()
-            val buffer = context.consumers()
+            val pose = context.poseStack()
+            val buffer = context.bufferSource()
             val immediate = buffer as MultiBufferSource.BufferSource
 
             val scale = scaleSetting.toFloat()
@@ -192,7 +192,7 @@ object NameTag : Module(
     val TestPipeline: RenderPipeline = RenderPipelines.register(
         RenderPipeline.builder(RenderPipelines.DEBUG_FILLED_SNIPPET)
             .withLocation("pipeline/debug_quads")
-            .withDepthTestFunction(DepthTestFunction.NO_DEPTH_TEST)
+            .withDepthStencilState(Optional.empty())
             .withCull(false)
             .build()
     )

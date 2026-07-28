@@ -5,6 +5,7 @@ import com.odtheking.odin.events.BlockUpdateEvent
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
+import com.odtheking.odin.utils.modMessage
 import com.tcmanna.tcsaddon.mixin.accessors.KeyMappingAccessor
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.Minecraft
@@ -16,7 +17,6 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
-import java.lang.Float
 import java.util.ArrayList
 import java.util.Locale
 import kotlin.math.atan2
@@ -94,9 +94,7 @@ object Icant4 : Module(
 
                     prefireActive = true
                     if (debugMode) {
-                        mc.player!!.displayClientMessage(
-                            Component.literal("§a[ICant4] Prefire started - holding right-click"), false
-                        )
+                        modMessage(Component.literal("§a[ICant4] Prefire started - holding right-click"))
                     }
                 }
             } else {
@@ -107,9 +105,7 @@ object Icant4 : Module(
 
                     prefireActive = false
                     if (debugMode) {
-                        mc.player!!.displayClientMessage(
-                            Component.literal("§c[ICant4] Prefire stopped"), false
-                        )
+                        modMessage(Component.literal("§c[ICant4] Prefire stopped"))
                     }
                 }
             }
@@ -120,9 +116,7 @@ object Icant4 : Module(
             }
 
             if (on4thDevice && !wasOnDevice && debugMode) {
-                mc.player!!.displayClientMessage(
-                    Component.literal("§e[ICant4] 4th Device detected!"), false
-                )
+                modMessage(Component.literal("§e[ICant4] 4th Device detected!"))
             }
 
         }
@@ -188,16 +182,16 @@ object Icant4 : Module(
             val yaw = angles[0]
             val pitch = angles[1]
 
-            if (Float.isNaN(yaw) || Float.isNaN(pitch)) return@on
+            if (yaw.isNaN() || pitch.isNaN()) return@on
 
             if (debugMode) {
-                mc.player!!.displayClientMessage(
+                modMessage(
                     Component.literal(
                         String.format(
                             "§a[ICant4] Shooting block %d (yaw=%.1f, pitch=%.1f)%s",
                             index + 1, yaw, pitch, if (isTerminator) " [TERM]" else ""
                         )
-                    ), false
+                    )
                 )
             }
 

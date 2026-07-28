@@ -2,7 +2,7 @@ package com.tcmanna.tcsaddon.utils
 
 import com.odtheking.odin.OdinMod.mc
 import com.odtheking.odin.events.RenderEvent
-import com.odtheking.odin.events.WorldEvent
+import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.core.on
 import com.tcmanna.tcsaddon.events.MouseEvent
 import net.minecraft.client.player.LocalPlayer
@@ -34,7 +34,7 @@ object RotationUtils {
             if (rotationTask != null) cancel()
         }
 
-        on<WorldEvent.Load> {
+        on<LevelEvent.Load> {
             rotationTask = null
         }
     }

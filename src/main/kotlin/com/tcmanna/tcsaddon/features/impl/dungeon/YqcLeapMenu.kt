@@ -79,7 +79,7 @@ object YqcLeapMenu : Module(
 //    }
 
     private val hoverHandler = List(5) { HoverHandler(200L) }
-    private val EMPTY = DungeonPlayer("Empty", DungeonClass.Unknown, 0, null)
+    private val EMPTY = DungeonPlayer("Empty", DungeonClass.EMPTY, 0, null)
     private val leapedRegex = Regex("You have teleported to (\\w{1,16})!")
     private val imageCacheMap = mutableMapOf<String, Int>()
 
@@ -397,11 +397,11 @@ object YqcLeapMenu : Module(
         players.sortBy { it.name }
 
         return listOf(
-            DungeonClass.Archer,
-            DungeonClass.Berserk,
-            DungeonClass.Mage,
-            DungeonClass.Healer,
-            DungeonClass.Tank,
+            DungeonClass.ARCHER,
+            DungeonClass.BERSERK,
+            DungeonClass.MAGE,
+            DungeonClass.HEALER,
+            DungeonClass.TANK,
         )
             .map { clazz -> players.firstOrNull { it.clazz == clazz }?.also(players::remove) }
             .map { it ?: players.removeFirstOrNull() ?: EMPTY }

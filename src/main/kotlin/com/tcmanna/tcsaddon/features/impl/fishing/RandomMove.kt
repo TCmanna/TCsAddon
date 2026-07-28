@@ -4,7 +4,7 @@ import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.events.TickEvent
-import com.odtheking.odin.events.WorldEvent
+import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.Module
@@ -205,7 +205,7 @@ object RandomMove : Module(
             }
         }
 
-        on<WorldEvent.Load> {
+        on<LevelEvent.Load> {
             onKeybind()
         }
     }
