@@ -15,6 +15,8 @@ repositories {
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven("https://maven.architectury.dev")
     maven("https://api.modrinth.com/maven")
+    maven("https://maven.starred.foo/releases")
+    maven("https://maven.starred.foo/snapshots")
 }
 
 dependencies {
@@ -38,7 +40,8 @@ dependencies {
 
     compileOnly("com.github.Noamm9:NoammAddons:1.2.3:cheat")
     compileOnly("me.shedaniel:RoughlyEnoughItems-fabric:26.1.819")
-    compileOnly("com.github.skies-starred.library:library-1.21.11:009")
+    compileOnly("com.github.skies-starred.library:library-26.1:010")
+    compileOnly("foo.starred:snowbird:011+26.1")
     compileOnly(files("libs/odin-client-0.2.3-r1+26.1.jar"))
 }
 

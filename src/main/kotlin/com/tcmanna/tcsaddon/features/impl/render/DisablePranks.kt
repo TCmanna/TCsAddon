@@ -18,6 +18,7 @@ object DisablePranks: Module(
 
     init {
         starredLoaded = FabricLoader.getInstance().isModLoaded("aerii-library")
+                || FabricLoader.getInstance().isModLoaded("snowbird")
         naLoaded = FabricLoader.getInstance().isModLoaded("noammaddons")
     }
 }

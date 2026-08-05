@@ -18,7 +18,8 @@ public class MixinPlugin implements IMixinConfigPlugin {
     @Override
     public void onLoad(String mixinPackage) {
         if (loaded) return;
-        isAeriiLibraryPresent = FabricLoader.getInstance().isModLoaded("aerii-library");
+        isAeriiLibraryPresent = FabricLoader.getInstance().isModLoaded("aerii-library")
+                || FabricLoader.getInstance().isModLoaded("snowbird");
         isOdinClientPresent = FabricLoader.getInstance().isModLoaded("odin-client");
         isNAPresent = FabricLoader.getInstance().isModLoaded("noammaddons");
         loaded = true;

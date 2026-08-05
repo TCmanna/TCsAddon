@@ -11,7 +11,9 @@
     "odin.MixinShenanigans",
     "odinclient.MixinImportantFeature",
     "skiesstarredlibrary.MixinAbstractWords",
-    "skiesstarredlibrary.MixinDonatorSize"
+    "skiesstarredlibrary.MixinAbstractWordsNew",
+    "skiesstarredlibrary.MixinDonatorSize",
+    "skiesstarredlibrary.MixinDonatorSizeNew"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -22,8 +24,8 @@
   "client": [
     "MixinClientLevel",
     "MixinEntityRenderer",
-    "MixinMinecraft",
     "MixinMouseHandler",
+    "MixinTextInputManager",
     "accessors.KeyMappingAccessor",
     "accessors.MultiPlayerGameModeAccessor"
   ]
