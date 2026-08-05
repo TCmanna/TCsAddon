@@ -14,6 +14,7 @@ import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.playSoundAtPlayer
 import com.tcmanna.tcsaddon.TCsAddon
+import com.odtheking.odin.clickgui.settings.impl.StringSetting
 import com.tcmanna.tcsaddon.utils.Utils
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
