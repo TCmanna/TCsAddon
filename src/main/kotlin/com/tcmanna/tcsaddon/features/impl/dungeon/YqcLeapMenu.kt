@@ -65,18 +65,9 @@ object YqcLeapMenu : Module(
     private val leapMessage by StringSetting(
         "Announce Message",
         "pc Leaped to %player%!",
+        length = 99999,
         desc = "%player% %class% %shortclass%"
     )
-
-//    private val debugButton by ActionSetting("set debug", "") {
-//        leapTeammates = listOf(
-//            DungeonPlayer("Empty", DungeonClass.Archer, 0, null),
-//            DungeonPlayer("Empty", DungeonClass.Berserk, 0, null),
-//            DungeonPlayer("Empty", DungeonClass.Mage, 0, null),
-//            DungeonPlayer("Empty", DungeonClass.Healer, 0, null),
-//            DungeonPlayer("Empty", DungeonClass.Tank, 0, null)
-//        )
-//    }
 
     private val hoverHandler = List(5) { HoverHandler(200L) }
     private val EMPTY = DungeonPlayer("Empty", DungeonClass.EMPTY, 0, null)

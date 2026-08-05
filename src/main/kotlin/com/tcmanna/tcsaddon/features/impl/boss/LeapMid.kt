@@ -7,7 +7,7 @@ import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.skyblock.Island
 import com.odtheking.odin.utils.skyblock.LocationUtils
-import com.tcmanna.tcsaddon.features.impl.dungeon.YqcLeapMenu
+import com.tcmanna.tcsaddon.features.impl.dungeon.WheelLeapMenu
 import com.tcmanna.tcsaddon.mixin.accessors.KeyMappingAccessor
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 
@@ -33,9 +33,9 @@ object LeapMid: Module(
                 val screen =
                     if (mc.screen is AbstractContainerScreen<*>) mc.screen as AbstractContainerScreen<*> else return@on
 
-                if (player.isPassenger && YqcLeapMenu.enabled && YqcLeapMenu.leapTeammates.isNotEmpty()) {
-                    YqcLeapMenu.leapTeammates.getOrNull(YqcLeapMenu.getArea() - 1)?.let {
-                        YqcLeapMenu.leapTo(it.name, screen)
+                if (player.isPassenger && WheelLeapMenu.enabled && WheelLeapMenu.leapTeammates.isNotEmpty()) {
+                    WheelLeapMenu.leapTeammates.getOrNull(WheelLeapMenu.getArea() - 1)?.let {
+                        WheelLeapMenu.leapTo(it.name, screen)
                         leaped = true
                         cooldown = 40
                     }

@@ -11,7 +11,7 @@ import com.tcmanna.tcsaddon.features.impl.boss.AutoSS
 import com.tcmanna.tcsaddon.features.impl.boss.Icant4
 import com.tcmanna.tcsaddon.features.impl.boss.LeapMid
 import com.tcmanna.tcsaddon.features.impl.dungeon.LagTracker
-import com.tcmanna.tcsaddon.features.impl.dungeon.YqcLeapMenu
+import com.tcmanna.tcsaddon.features.impl.dungeon.WheelLeapMenu
 import com.tcmanna.tcsaddon.features.impl.fishing.*
 import com.tcmanna.tcsaddon.features.impl.render.ChestESP
 import com.tcmanna.tcsaddon.features.impl.render.CorpseESP
@@ -24,6 +24,7 @@ import com.tcmanna.tcsaddon.features.impl.skyblock.AntiNick
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoBeachBall
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoCarnivalZombie
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoFusion
+import com.tcmanna.tcsaddon.features.impl.skyblock.InputFix
 import com.tcmanna.tcsaddon.features.impl.skyblock.LeftClicker
 import com.tcmanna.tcsaddon.utils.RotationUtils
 import net.fabricmc.api.ClientModInitializer
@@ -62,7 +63,7 @@ object TCsAddon : ClientModInitializer {
             AutoCarnivalZombie, NameTag, HideEntity, AutoFusion,
             ChestESP, CorpseESP, GoldenFishNotif, LittlefootESP,
             AutoBeachBall, VampireSlayer, LagTracker, DisablePranks,
-            YqcLeapMenu, LeapMid
+            LeapMid, WheelLeapMenu, InputFix
         )
         val debugUser = listOf("Paper_Flany", "MC_tianci", "TCmanna")
         if (debugUser.contains(Minecraft.getInstance().gameProfile.name))
