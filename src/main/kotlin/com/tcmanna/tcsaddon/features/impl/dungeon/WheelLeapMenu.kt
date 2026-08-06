@@ -45,6 +45,7 @@ object WheelLeapMenu : Module(
     private val deadColor by ColorSetting("Dead Color", Colors.MINECRAFT_DARK_RED.withAlpha(0.75f), true, desc = "Color of the background of the leap menu. (dead)").withDependency { !colorStyle }
     private val scale by NumberSetting("Scale", 0.5f, 0.1f, 2f, 0.1f, desc = "Scale of the leap menu.", unit = "x")
     private val sectorMode by BooleanSetting("Sector Selection Mode", true, "")
+    private val animation by BooleanSetting("Animation", true, "")
     private val renderLine by BooleanSetting("Render Line", true, "")
     private val leapAnnounce by BooleanSetting("Leap Announce", false, desc = "Announces when you leap to a player.")
     private val leapMessage by StringSetting("Announce Message", "pc Leaped to %player%!", length = 99999, desc = "%player% %class% %shortclass%")
@@ -111,7 +112,7 @@ object WheelLeapMenu : Module(
 
         NVGPIPRenderer.draw(guiGraphics, 0, 0, guiGraphics.guiWidth(), guiGraphics.guiHeight()) {
             var moveScale = 1f
-            if (openAnim.isAnimating()) {
+            if (animation && openAnim.isAnimating()) {
                 moveScale = openAnim.get(0f, 1f)
 
             }
@@ -286,6 +287,7 @@ object WheelLeapMenu : Module(
     }
 
     private fun updateOpened(value: Boolean) {
+        if (!animation) return
         if (opened != value) {
             opened = value
             if (opened) {
