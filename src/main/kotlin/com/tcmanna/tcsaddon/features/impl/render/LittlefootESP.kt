@@ -13,6 +13,7 @@ import com.odtheking.odin.utils.renderBoundingBox
 import com.odtheking.odin.utils.renderPos
 import com.odtheking.odin.utils.skyblock.Island
 import com.odtheking.odin.utils.skyblock.LocationUtils
+import com.tcmanna.tcsaddon.utils.Utils.getEntityTextureString
 import net.minecraft.world.entity.player.Player
 
 object LittlefootESP: Module(
@@ -51,17 +52,5 @@ object LittlefootESP: Module(
         }
     }
 
-    //copy from https://github.com/TurtleOnFire2/kittycat-1.21.11/blob/master/src/client/kotlin/kitty/cat/features/visual/CustomESP.kt
-    fun Player.getEntityTextureString(): String? {
-        val encoded = this.gameProfile.properties["textures"].firstOrNull()?.value
-        if (encoded != null) {
-            val json = String(java.util.Base64.getDecoder().decode(encoded))
-            val obj = com.google.gson.JsonParser.parseString(json).asJsonObject
-            return obj["textures"]?.asJsonObject
-                ?.get("SKIN")?.asJsonObject
-                ?.get("url")?.asString
-        }
 
-        return null
-    }
 }

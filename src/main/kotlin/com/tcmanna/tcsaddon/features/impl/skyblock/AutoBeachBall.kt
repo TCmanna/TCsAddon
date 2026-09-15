@@ -2,11 +2,11 @@ package com.tcmanna.tcsaddon.features.impl.skyblock
 
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
-import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.texture
+import com.tcmanna.tcsaddon.events.TickEventStart
 import com.tcmanna.tcsaddon.mixin.accessors.KeyMappingAccessor
 import com.tcmanna.tcsaddon.utils.ControlSystem
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
@@ -73,7 +73,7 @@ object AutoBeachBall : Module(
             message
         }
 
-        on<TickEvent.Start> {
+        on<TickEventStart> {
             updateTrajectory()
             when (state) {
                 State.PLACE -> handlePlace()

@@ -1,12 +1,15 @@
 package com.tcmanna.tcsaddon.features.impl.dungeon
 
+import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
+import com.odtheking.odin.clickgui.settings.impl.DropdownSetting
 import com.odtheking.odin.clickgui.settings.impl.StringSetting
-import com.odtheking.odin.events.ChatPacketEvent
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.LevelEvent
+import com.odtheking.odin.events.MessageEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
+import com.odtheking.odin.utils.PersonalBest
 import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.sendCommand
@@ -18,7 +21,13 @@ object LagTracker: Module(
     description = ""
 ) {
     private val sendLagToParty by BooleanSetting("Send Msg", true, "")
-    private val customMsg by StringSetting("Custom Msg", "{time} lost to lag.", desc = "{time} will be replace.")
+    private val sendPBToParty by BooleanSetting("Send PB", true, "")
+    private val customText by DropdownSetting("Custom Text")
+    private val customMsg by StringSetting("Custom Msg", "{time}s lost to lag.", desc = "{time} will be replace.").withDependency { customText }
+    private val customMinPbMsg by StringSetting("Custom Min PBMsg", " +MinPB {current}s -> {old}s", desc = "{current} and {old} will be replace.").withDependency { customText }
+    private val customMaxPbMsg by StringSetting("Custom Max PBMsg", " +MaxPB {current}s -> {old}s", desc = "{current} and {old} will be replace.").withDependency { customText }
+
+    private val lagPBs = PersonalBest(this, "DungeonLag")
 
     private const val RUN_START_MSG = "\u00a7e[NPC] \u00a7bMort\u00a7f: Here, I found this map when I first entered the dungeon."
     private val RUN_END_PATTERN = Pattern.compile("^\\s*\u2620 Defeated (.+) in 0?([\\dhms ]+)\\s*(\\(NEW RECORD!\\))?$")
@@ -27,7 +36,7 @@ object LagTracker: Module(
     private var ticks = 0L
 
     init {
-        on<ChatPacketEvent> {
+        on<MessageEvent.Chat> {
             val s = component.string
             if (!active && s == RUN_START_MSG) {
                 startMs = System.currentTimeMillis()
@@ -40,10 +49,12 @@ object LagTracker: Module(
                 val lag = wallSec - tickSec
                 active = false
                 if (lag >= 0.1) {
-                    val time = String.format("%.2f", lag) + "s"
+                    val time = "%.2f".format(lag)
                     val msg = customMsg.replace("{time}", time)
+
                     modMessage(msg, "§3Lag Tracker §8»§r ")
-                    if (sendLagToParty) sendCommand("pc $msg".noControlCodes)
+                    val pbText = updateLagPB(lag.toFloat())
+                    if (sendLagToParty) sendCommand("pc ${msg.noControlCodes}${if (sendPBToParty) pbText else ""}")
                 }
             }
         }
@@ -57,5 +68,34 @@ object LagTracker: Module(
             startMs = 0L
             ticks = 0L
         }
+    }
+
+    private fun updateLagPB(time: Float): String {
+        var pbString = ""
+        val oldMinPB = lagPBs.get("LagMin") ?: 10.0f
+        val oldMaxPB = lagPBs.get("LagMax") ?: 30.0f
+
+        if (oldMinPB > time) {
+            lagPBs.set("LagMin", time)
+            pbString += customMinPbMsg
+                .replace("{current}", "%.2f".format(time))
+                .replace("{old}", "%.2f".format(oldMinPB))
+
+            modMessage("§7(§a§lNew Min PB§r§7) §a$time §r§7-> §8$oldMinPB", "§3Lag Tracker §8»§r ")
+        }
+
+        if (oldMaxPB < time) {
+            lagPBs.set("LagMax", time)
+            pbString += customMaxPbMsg
+                .replace("{current}", "%.2f".format(time))
+                .replace("{old}", "%.2f".format(oldMaxPB))
+            modMessage("§7(§c§lNew Max PB§r§7) §c$time §r§7-> §8$oldMaxPB", "§3Lag Tracker §8»§r ")
+        }
+
+        val newMinPB = minOf(oldMinPB, time)
+        val newMaxPB = maxOf(oldMaxPB, time)
+
+        modMessage("§8(§7${"%.2f".format(newMinPB)} / ${"%.2f".format(newMaxPB)}§8)", "§3Lag Tracker §8»§r ")
+        return pbString
     }
 }

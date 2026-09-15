@@ -10,6 +10,9 @@ group = property("maven_group")!!
 version = property("mod_version")!!
 
 repositories {
+    maven {
+        url = uri("$rootDir/libs")
+    }
     mavenCentral()
     maven("https://jitpack.io")
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
@@ -26,7 +29,8 @@ dependencies {
     implementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_api_version")}")
 
     runtimeOnly("me.djtheredstoner:DevAuth-fabric:${property("devauth_version")}")
-    implementation("maven.modrinth:odin:${property("odin_version")}")
+//    implementation("com.tcmanna:Odin:${property("odin_version")}")
+    implementation("com.github.odtheking:Odin:${property("odin_version")}")
 
     implementation("com.github.stivais:Commodore:${property("commodore_version")}")
 
@@ -43,6 +47,13 @@ dependencies {
     compileOnly("com.github.skies-starred.library:library-26.1:010")
     compileOnly("foo.starred:snowbird:011+26.1")
     compileOnly(files("libs/odin-client-0.2.3-r1+26.1.jar"))
+    implementation("com.github.hannibal002.SkyHanni:26.1:7.48.0")
+    property("kite_version").let {
+        implementation("io.github.tristan852:kite:$it")
+        include("io.github.tristan852:kite:$it")
+        include("org.fusesource.jansi:jansi:2.4.2")
+    }
+
 }
 
 loom {
@@ -106,4 +117,8 @@ fabricApi {
     configureDataGeneration {
         client = true
     }
+}
+
+tasks.test {
+    enabled = false
 }

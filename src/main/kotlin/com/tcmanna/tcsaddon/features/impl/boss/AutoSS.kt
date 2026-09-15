@@ -6,17 +6,17 @@ import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.clickgui.settings.impl.SelectorSetting
 import com.odtheking.odin.events.BlockUpdateEvent
-import com.odtheking.odin.events.ChatPacketEvent
 import com.odtheking.odin.events.PacketEvent
 import com.odtheking.odin.events.RenderEvent
-import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.LevelEvent
+import com.odtheking.odin.events.MessageEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.sendCommand
 import com.odtheking.odin.utils.toFixed
+import com.tcmanna.tcsaddon.events.TickEventStart
 import com.tcmanna.tcsaddon.utils.Animation
 import com.tcmanna.tcsaddon.utils.AuraManager
 import com.tcmanna.tcsaddon.utils.RotationUtils.rotateSmoothly
@@ -70,8 +70,8 @@ object AutoSS: Module(
             fullReset()
         }
 
-        on<ChatPacketEvent> {
-            if (value == "[BOSS] Goldor: Who dares trespass into my domain?") start()
+        on<MessageEvent.Chat> {
+            if (message == "[BOSS] Goldor: Who dares trespass into my domain?") start()
         }
 
         on<PacketEvent.Send> {
@@ -144,7 +144,7 @@ object AutoSS: Module(
             }
         }
 
-        on<TickEvent.Start> {
+        on<TickEventStart> {
             val player = mc.player?: return@on
             if (startActive) {
                 if (!auto || !autoSkip) {

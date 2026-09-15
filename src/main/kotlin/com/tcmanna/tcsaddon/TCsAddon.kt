@@ -5,8 +5,8 @@ import com.odtheking.odin.events.core.EventBus
 import com.odtheking.odin.features.ModuleManager
 import com.odtheking.odin.utils.ui.rendering.Font
 import com.tcmanna.tcsaddon.commands.odinAddonCommand
-import com.tcmanna.tcsaddon.events.FishingEventDispatcher
 import com.tcmanna.tcsaddon.events.core.CustomEventDispatcher
+import com.tcmanna.tcsaddon.events.core.FishingEventDispatcher
 import com.tcmanna.tcsaddon.features.impl.boss.AutoSS
 import com.tcmanna.tcsaddon.features.impl.boss.Icant4
 import com.tcmanna.tcsaddon.features.impl.boss.LeapMid
@@ -19,11 +19,14 @@ import com.tcmanna.tcsaddon.features.impl.render.DisablePranks
 import com.tcmanna.tcsaddon.features.impl.render.HideEntity
 import com.tcmanna.tcsaddon.features.impl.render.LittlefootESP
 import com.tcmanna.tcsaddon.features.impl.render.NameTag
+import com.tcmanna.tcsaddon.features.impl.rift.Auto4InARaw
 import com.tcmanna.tcsaddon.features.impl.rift.VampireSlayer
 import com.tcmanna.tcsaddon.features.impl.skyblock.AntiNick
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoBeachBall
+import com.tcmanna.tcsaddon.features.impl.skyblock.AutoCarnivalFruit
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoCarnivalZombie
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoFusion
+import com.tcmanna.tcsaddon.features.impl.skyblock.HuntingHelper
 import com.tcmanna.tcsaddon.features.impl.skyblock.InputFix
 import com.tcmanna.tcsaddon.features.impl.skyblock.LeftClicker
 import com.tcmanna.tcsaddon.utils.RotationUtils
@@ -63,11 +66,12 @@ object TCsAddon : ClientModInitializer {
             AutoCarnivalZombie, NameTag, HideEntity, AutoFusion,
             ChestESP, CorpseESP, GoldenFishNotif, LittlefootESP,
             AutoBeachBall, VampireSlayer, LagTracker, DisablePranks,
-            LeapMid, WheelLeapMenu, InputFix
+            LeapMid, WheelLeapMenu, InputFix, HuntingHelper, AutoCarnivalFruit,
+            Auto4InARaw
         )
         val debugUser = listOf("Paper_Flany", "MC_tianci", "TCmanna")
         if (debugUser.contains(Minecraft.getInstance().gameProfile.name))
-            ModuleManager.registerModules(moduleConfig, Debug)
+            ModuleManager.registerModules(moduleConfig, Debug, Farming)
     }
 
     @JvmStatic

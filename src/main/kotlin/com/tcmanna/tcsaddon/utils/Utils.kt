@@ -4,10 +4,15 @@ import com.tcmanna.tcsaddon.mixin.accessors.KeyMappingAccessor
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
+import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.AirItem
 import net.minecraft.world.item.Items
+import net.minecraft.world.phys.Vec3
 import java.util.regex.Pattern
+import kotlin.collections.firstOrNull
+import kotlin.math.floor
 
 object Utils {
     val mc = Minecraft.getInstance()
@@ -53,4 +58,20 @@ object Utils {
         KeyMapping.click(key)
         KeyMapping.set(key, false)
     }
+
+    //copy from https://github.com/TurtleOnFire2/kittycat-1.21.11/blob/master/src/client/kotlin/kitty/cat/features/visual/CustomESP.kt
+    fun Player.getEntityTextureString(): String? {
+        val encoded = this.gameProfile.properties["textures"].firstOrNull()?.value
+        if (encoded != null) {
+            val json = String(java.util.Base64.getDecoder().decode(encoded))
+            val obj = com.google.gson.JsonParser.parseString(json).asJsonObject
+            return obj["textures"]?.asJsonObject
+                ?.get("SKIN")?.asJsonObject
+                ?.get("url")?.asString
+        }
+
+        return null
+    }
+
+    fun Vec3.toPos() = BlockPos(floor(x).toInt(), floor(y).toInt(), floor(z).toInt())
 }

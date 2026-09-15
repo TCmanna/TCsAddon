@@ -1,7 +1,7 @@
 package com.tcmanna.tcsaddon.features.impl.fishing
 
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
-import com.odtheking.odin.events.ChatPacketEvent
+import com.odtheking.odin.events.MessageEvent
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Category
@@ -33,8 +33,8 @@ object GoldenFishNotif: Module(
             }
         }
 
-        on<ChatPacketEvent> {
-            if (value.trim() == TEXT) {
+        on<MessageEvent.Chat> {
+            if (message.trim() == TEXT) {
                 if (forceFocus) {
                     val handle = mc.window.handle()
                     GLFW.glfwFocusWindow(handle)

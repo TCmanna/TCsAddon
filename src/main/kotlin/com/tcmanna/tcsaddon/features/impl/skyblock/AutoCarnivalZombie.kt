@@ -1,12 +1,22 @@
 package com.tcmanna.tcsaddon.features.impl.skyblock
 
+import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
+import com.odtheking.odin.events.MessageEvent
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
+import com.odtheking.odin.events.core.onReceive
 import com.odtheking.odin.features.Module
+import com.odtheking.odin.utils.sendCommand
+import com.tcmanna.tcsaddon.events.TickEventStart
+import com.tcmanna.tcsaddon.utils.Animation
+import com.tcmanna.tcsaddon.utils.ControlSystem
+import com.tcmanna.tcsaddon.utils.RotationUtils.rotateSmoothly
 import com.tcmanna.tcsaddon.utils.Utils
 import net.minecraft.core.BlockPos
+import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.RedstoneLampBlock
 import net.minecraft.world.phys.Vec3
@@ -17,7 +27,18 @@ object AutoCarnivalZombie : Module(
     name = "Auto Carnival Zombie",
     description = "Auto Shooting."
 ) {
+    private val autoRestart by BooleanSetting("Auto Restart", false, "")
+    private val lowPriorityZombie by BooleanSetting("Low Priority", true, "Set diamond baby zombie to lower priority.")
+
+    private val tpPos = Vec3(-96.5, 70.0, 37.5)
+    private val walkPos1 = Vec3(-99.5, 70.0, 40.5)
+    private val walkPos2 = Vec3(-102.5, 70.0, 39.5)
+    private val npcPos = Vec3(-103.5, 71.5, 38.5)
+
+    private var walking = 0
     private var lastClick = 0L
+    private var aimDelay = 0
+    private var sendCommand = false
 
     private val lampCoords = listOf(
         BlockPos(-96, 76, 61),
@@ -55,6 +76,68 @@ object AutoCarnivalZombie : Module(
             mc.execute { Utils.playerUseHeldItem(player, true) }
             lastClick = now
         }
+
+        onReceive<ClientboundPlayerPositionPacket> {
+            if (!autoRestart) return@onReceive
+            if (change.position == tpPos) walking = 2
+        }
+
+        on<TickEventStart> {
+            if (aimDelay > 0 && --aimDelay == 0) aimNPC()
+
+            if (!autoRestart || walking == 0) return@on
+            walkToNPC()
+        }
+
+        on<MessageEvent.Chat> {
+            if (!autoRestart) return@on
+            if (message == "[NPC] Carnival Cowboy: Wouldja like to play Zombie Shootout?") {
+                sendCommand = true
+            }
+            if (message.contains("[Sure thing, partner!]") && sendCommand) {
+                sendCommand("selectnpcoption carnival_cowboy r_2_1")
+                sendCommand = false
+            }
+        }
+    }
+
+    private fun walkToNPC() {
+        ControlSystem.fullRelease()
+        val player = mc.player?: return
+
+        if (walking == 2) {
+            val distance = player.distanceToSqr(walkPos1)
+            if (distance < 1.5) {
+                ControlSystem.haltMovement()
+                walking--
+                aimDelay = 10
+                return
+            }
+            ControlSystem.setMovementToCoords(walkPos1)
+        } else if (walking == 1) {
+            val distance = player.distanceToSqr(walkPos2)
+            if (distance < 1.5) {
+                ControlSystem.haltMovement()
+                walking--
+                return
+            }
+            ControlSystem.setMovementToCoords(walkPos2)
+        }
+    }
+
+    private fun aimNPC() {
+        val player = mc.player?: return
+
+        val calcYawPitch = calcYawPitch(npcPos)?: return
+
+        player.rotateSmoothly(
+            calcYawPitch.first,
+            calcYawPitch.second,
+            200f,
+            Animation.Style.Linear
+        ) {
+            Utils.realRightClick()
+        }
     }
 
     private fun getTarget(): MutableList<Vec3>? {
@@ -65,17 +148,15 @@ object AutoCarnivalZombie : Module(
         if (zombies.isEmpty()) return null
 
         val itemLists = mutableMapOf(
-            "Diamond" to mutableListOf(),
-            "Golden" to mutableListOf(),
-            "Iron" to mutableListOf(),
-            "Leather" to mutableListOf<Vec3>()
+            Items.DIAMOND_CHESTPLATE to mutableListOf(),
+            Items.GOLDEN_CHESTPLATE to mutableListOf(),
+            Items.IRON_CHESTPLATE to mutableListOf(),
+            Items.LEATHER_CHESTPLATE to mutableListOf<Vec3>()
         )
 
         for (zombie in zombies) {
             val chestplate = zombie.getItemBySlot(EquipmentSlot.CHEST)
             if (chestplate.isEmpty) continue
-
-            val name = chestplate.hoverName.string
 
             if (player.distanceTo(zombie) > 40f) continue
 
@@ -85,10 +166,14 @@ object AutoCarnivalZombie : Module(
                 zombie.z + zombie.deltaMovement.z * 8
             )
 
-            for ((key, list) in itemLists) {
-                if (name.contains(key)) {
-                    list.add(predicted)
-                    break
+            if (lowPriorityZombie && zombie.isBaby && chestplate.item == Items.DIAMOND_CHESTPLATE) {
+                itemLists[Items.LEATHER_CHESTPLATE]!!.add(predicted)
+            } else {
+                for ((key, list) in itemLists) {
+                    if (chestplate.item == key) {
+                        list.add(predicted)
+                        break
+                    }
                 }
             }
         }
@@ -98,7 +183,6 @@ object AutoCarnivalZombie : Module(
         for (blockPos in lampCoords) {
             val block = level.getBlockState(blockPos)
 
-            // 124 = Redstone Lamp (lit) in old versions
             if (block.block == Blocks.REDSTONE_LAMP && block.getValue(RedstoneLampBlock.LIT)) {
                 lampList.add(
                     Vec3(blockPos.x + 0.5, blockPos.y + 0.6, blockPos.z + 0.5)
@@ -107,11 +191,11 @@ object AutoCarnivalZombie : Module(
         }
 
         val result = mutableListOf<Vec3>()
-        result += itemLists["Diamond"]!!
+        result += itemLists[Items.DIAMOND_CHESTPLATE]!!
         result += lampList
-        result += itemLists["Golden"]!!
-        result += itemLists["Iron"]!!
-        result += itemLists["Leather"]!!
+        result += itemLists[Items.GOLDEN_CHESTPLATE]!!
+        result += itemLists[Items.IRON_CHESTPLATE]!!
+        result += itemLists[Items.LEATHER_CHESTPLATE]!!
 
         return result
     }

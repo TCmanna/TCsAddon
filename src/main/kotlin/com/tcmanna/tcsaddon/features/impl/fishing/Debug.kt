@@ -1,32 +1,45 @@
 package com.tcmanna.tcsaddon.features.impl.fishing
 
-import com.odtheking.odin.events.PacketEvent
+import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.Module
-import com.odtheking.odin.utils.modMessage
-import com.odtheking.odin.utils.noControlCodes
-import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket
+import com.tcmanna.tcsaddon.utils.ControlSystem
+import net.minecraft.world.phys.Vec3
 
 //nan
 object Debug : Module(
-    name = "DEBUG",
+    name = "Debug",
     category = Category.custom("Fishing"),
     description = "Test."
 ) {
-    private val bounceRegex = Regex("Bounces: (\\d{1,3})")
+
+    private val tpPos = Vec3(-96.5, 70.0, 37.5)
+    private val talkPos = Vec3(-100.5, 70.0, 39.5)
 
     init {
-        on<PacketEvent.Receive> {
-            if (packet is ClientReceiveMessageEvents.ModifyGame) {
-                val text = (packet as ClientboundSetActionBarTextPacket).text.string.noControlCodes
-                modMessage(text)
-
-                val match = bounceRegex.find(text)
-
-                if (match != null) modMessage("b: " + match.groupValues[1].toInt())
-            }
-        }
+//        on<TickEventStart> {
+//            ControlSystem.fullRelease()
+//            val player = mc.player?: return@on
+//            val level = mc.level?: return@on
+//
+//            val distance = player.distanceToSqr(talkPos)
+//            if (distance < 1.5) {
+//                ControlSystem.haltMovement()
+//                this@Debug.toggle()
+//                return@on
+//            }
+//            ControlSystem.setMovementToCoords(talkPos)
+//        }
     }
+
+    override fun onEnable() {
+        super.onEnable()
+    }
+
+    override fun onDisable() {
+     super.onDisable()
+    }
+
+
 }

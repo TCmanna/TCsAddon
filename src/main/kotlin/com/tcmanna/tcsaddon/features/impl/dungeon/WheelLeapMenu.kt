@@ -6,7 +6,8 @@ import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.ColorSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.clickgui.settings.impl.StringSetting
-import com.odtheking.odin.events.ChatPacketEvent
+import com.odtheking.odin.events.MessageEvent
+import com.odtheking.odin.events.ScreenCloseEvent
 import com.odtheking.odin.events.ScreenEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.events.core.onReceive
@@ -45,6 +46,7 @@ object WheelLeapMenu : Module(
     private val deadColor by ColorSetting("Dead Color", Colors.MINECRAFT_DARK_RED.withAlpha(0.75f), true, desc = "Color of the background of the leap menu. (dead)").withDependency { !colorStyle }
     private val scale by NumberSetting("Scale", 0.5f, 0.1f, 2f, 0.1f, desc = "Scale of the leap menu.", unit = "x")
     private val sectorMode by BooleanSetting("Sector Selection Mode", true, "")
+    private val centralThreshold by NumberSetting("Central Threshold", 10f, 5f, 340f, 5f, "").withDependency { sectorMode }
     private val animation by BooleanSetting("Animation", true, "")
     private val renderLine by BooleanSetting("Render Line", true, "")
     private val leapAnnounce by BooleanSetting("Leap Announce", false, desc = "Announces when you leap to a player.")
@@ -68,7 +70,7 @@ object WheelLeapMenu : Module(
     var leapTeammates: List<DungeonPlayer> = emptyList()
 
     init {
-        on<ScreenEvent.Close> {
+        on<ScreenCloseEvent> {
             updateOpened(false)
         }
 
@@ -77,6 +79,7 @@ object WheelLeapMenu : Module(
 
             val valid = chest.title.string.equalsOneOf("Spirit Leap", "Teleport to Player")
             if (!valid || leapTeammates.isEmpty() || leapTeammates.all { it == EMPTY }) return@on
+            if (!opened) resetMouseToCenter()
             updateOpened(true)
             drawWheel()
             cancel()
@@ -86,9 +89,9 @@ object WheelLeapMenu : Module(
             mouseTrigger()
         }
 
-        on<ChatPacketEvent> {
+        on<MessageEvent.Chat> {
             if (!leapAnnounce || !DungeonUtils.inDungeons) return@on
-            leapedRegex.find(value)?.groupValues?.get(1)?.let { name ->
+            leapedRegex.find(message)?.groupValues?.get(1)?.let { name ->
                 val teammate = DungeonListener.dungeonTeammatesNoSelf.firstOrNull { it.name == name }
                 val cls = teammate?.clazz?.name ?: "???"
                 val shortCls = cls.firstOrNull()?.toString() ?: "?"
@@ -99,6 +102,16 @@ object WheelLeapMenu : Module(
         onReceive<ClientboundPlayerInfoUpdatePacket>(-100) {
             updateDungeonTeammates()
         }
+    }
+
+    private fun resetMouseToCenter() {
+        val window = mc.window
+
+        GLFW.glfwSetCursorPos(
+            window.handle(),
+            window.screenWidth / 2.0,
+            window.screenHeight / 2.0
+        )
     }
 
     private fun updateDungeonTeammates() = mc.execute {
@@ -174,7 +187,7 @@ object WheelLeapMenu : Module(
                     NVGRenderer.defaultFont
                 )
 
-                val playerName = shrinkString(player.name, CARD_SIZE - 40f, fontSize)
+                val playerName = player.name
                 val playerWidth = NVGRenderer.textWidth(playerName, fontSize, NVGRenderer.defaultFont)
 
                 NVGRenderer.textShadow(
@@ -233,7 +246,7 @@ object WheelLeapMenu : Module(
 
         if (!sectorMode) {
             if (distance !in INNER_RADIUS..OUTER_RADIUS) return 0
-        } else if (distance !in 10f..2000f) return 0
+        } else if (distance !in centralThreshold..2000f) return 0
 
         var angle = Math.toDegrees(atan2(cy.toDouble(), cx.toDouble())).toFloat() - START_ANGLE
         angle %= 360f
@@ -263,7 +276,7 @@ object WheelLeapMenu : Module(
             it.item.hoverName.string.substringAfter(' ')
                 .equals(name.noControlCodes, ignoreCase = true)
         }?.index ?: return
-        mc.player?.clickSlot(screenHandler.menu.containerId, index)
+        mc.player?.clickSlot(index)
         modMessage("Teleporting to $name.")
     }
 
@@ -287,13 +300,13 @@ object WheelLeapMenu : Module(
     }
 
     private fun updateOpened(value: Boolean) {
-        if (!animation) return
-        if (opened != value) {
-            opened = value
-            if (opened) {
-                openAnim = EaseOutAnimation(300)
-                openAnim.start()
-            }
+        if (opened == value) return
+
+        opened = value
+
+        if (opened && animation) {
+            openAnim = EaseOutAnimation(300)
+            openAnim.start()
         }
     }
 }

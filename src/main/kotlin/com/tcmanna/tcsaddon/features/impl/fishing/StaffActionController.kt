@@ -1,10 +1,10 @@
 package com.tcmanna.tcsaddon.features.impl.fishing
 
 import com.odtheking.odin.OdinMod.mc
-import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.utils.modMessage
 import com.tcmanna.tcsaddon.events.MouseEvent
+import com.tcmanna.tcsaddon.events.TickEventStart
 import com.tcmanna.tcsaddon.mixin.accessors.KeyMappingAccessor
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -12,7 +12,7 @@ import kotlin.random.Random
 
 object StaffActionController {
     init {
-        on<TickEvent.Start> {
+        on<TickEventStart> {
             if (mc.player == null) return@on
             if (running) {
                 tick()

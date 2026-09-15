@@ -93,7 +93,6 @@ object NameTag : Module(
             val camera = mc.gameRenderer.mainCamera
             val pose = context.poseStack()
             val buffer = context.bufferSource()
-            val immediate = buffer as MultiBufferSource.BufferSource
 
             val scale = scaleSetting.toFloat()
             val color = ((a.toInt() shl 24) or
@@ -105,7 +104,7 @@ object NameTag : Module(
                 renderBG(target, pose, buffer, camera, scale, color)
             }
 
-            immediate.endBatch()
+            buffer.endBatch()
         }
 
     }

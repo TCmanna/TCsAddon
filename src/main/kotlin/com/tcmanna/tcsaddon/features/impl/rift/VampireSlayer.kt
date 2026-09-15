@@ -4,12 +4,12 @@ import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.events.PacketEvent
-import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.skyblock.Island
 import com.odtheking.odin.utils.skyblock.LocationUtils
+import com.tcmanna.tcsaddon.events.TickEventStart
 
 object VampireSlayer : Module(
     name = "Vampire Slayer",
@@ -52,7 +52,7 @@ object VampireSlayer : Module(
     }
 
     init {
-        on<TickEvent.Start> {
+        on<TickEventStart> {
             if (mc.player == null || mc.level == null) return@on
             if (LocationUtils.currentArea != Island.Rift) return@on
 

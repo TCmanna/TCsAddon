@@ -1,12 +1,12 @@
 package com.tcmanna.tcsaddon.features.impl.boss
 
 import com.odtheking.odin.events.InputEvent
-import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.skyblock.Island
 import com.odtheking.odin.utils.skyblock.LocationUtils
+import com.tcmanna.tcsaddon.events.TickEventStart
 import com.tcmanna.tcsaddon.features.impl.dungeon.WheelLeapMenu
 import com.tcmanna.tcsaddon.mixin.accessors.KeyMappingAccessor
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
@@ -19,7 +19,7 @@ object LeapMid: Module(
     private var cooldown = 0
 
     init {
-        on<TickEvent.Start> {
+        on<TickEventStart> {
             val player = mc.player ?: return@on
             if (LocationUtils.currentArea != Island.Dungeon) return@on
 

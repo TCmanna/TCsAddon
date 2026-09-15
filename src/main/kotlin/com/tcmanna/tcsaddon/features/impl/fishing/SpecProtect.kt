@@ -3,7 +3,6 @@ package com.tcmanna.tcsaddon.features.impl.fishing
 import com.odtheking.odin.clickgui.ClickGUI
 import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.*
-import com.odtheking.odin.events.ChatPacketEvent
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.core.on
@@ -15,6 +14,7 @@ import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.playSoundAtPlayer
 import com.tcmanna.tcsaddon.TCsAddon
 import com.odtheking.odin.clickgui.settings.impl.StringSetting
+import com.odtheking.odin.events.MessageEvent
 import com.tcmanna.tcsaddon.utils.Utils
 import net.minecraft.client.gui.screens.ChatScreen
 import net.minecraft.client.gui.screens.inventory.InventoryScreen
@@ -148,11 +148,11 @@ object SpecProtect : Module(
             }
         }
 
-        on<ChatPacketEvent> {
+        on<MessageEvent.Chat> {
             if (dmCheck) {
-                if (value.startsWith("From ")) {
+                if (message.startsWith("From ")) {
                     if (msgInfo.isNotEmpty()) {
-                        if (value.contains(msgInfo)) triggerStaffCheck("Direct Message Contains [$msgInfo]")
+                        if (message.contains(msgInfo)) triggerStaffCheck("Direct Message Contains [$msgInfo]")
                     }
                     else triggerStaffCheck("Any Direct Message [$msgInfo]")
                 }

@@ -1,12 +1,12 @@
 package com.tcmanna.tcsaddon.features.impl.skyblock
 
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
-import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.events.core.onReceive
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.clickSlot
 import com.odtheking.odin.utils.noControlCodes
+import com.tcmanna.tcsaddon.events.TickEventStart
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket
 import net.minecraft.world.inventory.ContainerInput
@@ -32,7 +32,7 @@ object AutoFusion: Module(
             }
         }
 
-        on<TickEvent.Start> {
+        on<TickEventStart> {
             if (!shouldClick) return@on
             if (clickDelay > System.currentTimeMillis()) return@on
 
@@ -41,12 +41,12 @@ object AutoFusion: Module(
                 val windowName = screen.title.string.noControlCodes
 
                 if (windowName.contains(fusionBox)) {
-                    mc.player?.clickSlot(screen.menu.containerId, 47, 2, ContainerInput.CLONE)
+                    mc.player?.clickSlot(47, 2, ContainerInput.CLONE)
                     shouldClick = false
                 }
 
                 if (windowName.contains(confirm)) {
-                    mc.player?.clickSlot(screen.menu.containerId, 33, 2, ContainerInput.CLONE)
+                    mc.player?.clickSlot(33, 2, ContainerInput.CLONE)
                     shouldClick = false
                 }
             }

@@ -13,7 +13,8 @@
     "skiesstarredlibrary.MixinAbstractWords",
     "skiesstarredlibrary.MixinAbstractWordsNew",
     "skiesstarredlibrary.MixinDonatorSize",
-    "skiesstarredlibrary.MixinDonatorSizeNew"
+    "skiesstarredlibrary.MixinDonatorSizeNew",
+    "skyhanni.CarnivalFruitDiggingAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -27,6 +28,7 @@
     "MixinMouseHandler",
     "MixinTextInputManager",
     "accessors.KeyMappingAccessor",
-    "accessors.MultiPlayerGameModeAccessor"
+    "accessors.MultiPlayerGameModeAccessor",
+    "rei.HideREIRecipeWarning"
   ]
 }

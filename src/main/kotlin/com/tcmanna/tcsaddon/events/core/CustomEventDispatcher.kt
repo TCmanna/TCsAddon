@@ -1,6 +1,7 @@
 package com.tcmanna.tcsaddon.events.core
 
 import com.odtheking.odin.OdinMod.mc
+import com.tcmanna.tcsaddon.events.TickEventStart
 import com.tcmanna.tcsaddon.events.WorldLoadEndEvent
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLevelEvents
@@ -20,5 +21,7 @@ object CustomEventDispatcher {
         ClientLevelEvents.AFTER_CLIENT_LEVEL_CHANGE.register { _, _ ->
             tabLoaded = false
         }
+
+        ClientTickEvents.START_LEVEL_TICK.register { world -> TickEventStart(world).postAndCatch() }
     }
 }

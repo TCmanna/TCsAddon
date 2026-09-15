@@ -3,7 +3,6 @@ package com.tcmanna.tcsaddon.features.impl.render
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.ColorSetting
 import com.odtheking.odin.events.RenderEvent
-import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
@@ -12,6 +11,7 @@ import com.odtheking.odin.utils.render.drawFilledBox
 import com.odtheking.odin.utils.render.drawWireFrameBox
 import com.odtheking.odin.utils.skyblock.Island
 import com.odtheking.odin.utils.skyblock.LocationUtils
+import com.tcmanna.tcsaddon.events.TickEventStart
 import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.level.block.entity.ChestBlockEntity
@@ -19,9 +19,6 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import java.util.concurrent.ConcurrentHashMap
-
-
-
 
 object ChestESP: Module(
     name = "Chest ESP",
@@ -37,7 +34,7 @@ object ChestESP: Module(
     var backDown = 0
 
     init {
-        on<TickEvent.Start> {
+        on<TickEventStart> {
             val player = mc.player?: return@on
             val level = mc.level?: return@on
 

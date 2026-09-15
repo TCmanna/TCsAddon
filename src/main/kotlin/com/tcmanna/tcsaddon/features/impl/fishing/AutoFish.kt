@@ -5,6 +5,7 @@ import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.LevelEvent
+import com.odtheking.odin.events.MessageEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.Module
@@ -34,6 +35,7 @@ object AutoFish : Module(
     private val reThrowCooldown by NumberSetting("ReThrow Time", 350L, 100L, 1000L, 50L, "")
     private val stateCheck by BooleanSetting("State Check", true, "")
     private val hitCheck by BooleanSetting("Hit Check", true, "")
+    private val skipPuddle by BooleanSetting("Skip PuddleJumper", false, "")
     private val checkDelaySetting by NumberSetting("Check Delay", 8, 4, 20, 1, "Unit second.")
     private val hud by HUD("Show Catch Time", "Display the time since the last catch.") {
         if ((lastTime <= 60000 && Utils.playerHoldFishRod(mc.player)) || it) {
@@ -147,6 +149,19 @@ object AutoFish : Module(
                         }
                         isReThrow = false
                     }, 400, TimeUnit.MILLISECONDS)
+                }
+            }
+        }
+
+        on<MessageEvent.Chat> {
+            if (!skipPuddle) return@on
+            val player = mc.player?: return@on
+            if (message == "[MOB] Puddle Jumper: Let's get ready for a ride!") {
+                if (Utils.playerHoldFishRod(player)) {
+                    Utils.playerUseHeldItem(player, packetClick)
+                    executor.schedule({
+                        if (Utils.playerHoldFishRod(mc.player)) Utils.playerUseHeldItem(mc.player, packetClick)
+                    }, 5000, TimeUnit.MILLISECONDS)
                 }
             }
         }
