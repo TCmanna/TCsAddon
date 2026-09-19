@@ -13,6 +13,7 @@ import com.odtheking.odin.utils.PersonalBest
 import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.sendCommand
+import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
 import java.util.regex.Pattern
 
 
@@ -29,21 +30,21 @@ object LagTracker: Module(
 
     private val lagPBs = PersonalBest(this, "DungeonLag")
 
-    private const val RUN_START_MSG = "\u00a7e[NPC] \u00a7bMort\u00a7f: Here, I found this map when I first entered the dungeon."
-    private val RUN_END_PATTERN = Pattern.compile("^\\s*\u2620 Defeated (.+) in 0?([\\dhms ]+)\\s*(\\(NEW RECORD!\\))?$")
+    private const val RUN_START_MSG = "[NPC] Mort: Here, I found this map when I first entered the dungeon."
+    private val terminalCompleteRegex = Regex("^\\s*☠ Defeated (.+) in 0?([\\dhms ]+?)\\s*(\\(NEW RECORD!\\))?$")
     private var active = false
     private var startMs = 0L
     private var ticks = 0L
 
     init {
         on<MessageEvent.Chat> {
-            val s = component.string
-            if (!active && s == RUN_START_MSG) {
+            if (!DungeonUtils.inDungeons) return@on
+            if (!active && message == RUN_START_MSG) {
                 startMs = System.currentTimeMillis()
                 ticks = 0L
                 active = true
             }
-            else if (active && RUN_END_PATTERN.matcher(s).find()) {
+            else if (active && terminalCompleteRegex.matches(message)) {
                 val wallSec = (System.currentTimeMillis() - startMs).toDouble() / 1000.0
                 val tickSec = ticks.toDouble() * 0.05
                 val lag = wallSec - tickSec

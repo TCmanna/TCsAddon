@@ -79,6 +79,10 @@ afterEvaluate {
     }
 }
 
+val noKiteJar = tasks.register<Jar>("noKiteJar") {
+    from(sourceSets.main.get().output)
+}
+
 tasks {
     processResources {
         outputs.upToDateWhen { false }
@@ -100,6 +104,18 @@ tasks {
         options.encoding = "UTF-8"
         options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:unchecked"))
     }
+
+    test {
+        enabled = false
+    }
+
+    jar {
+        archiveClassifier.set("full")
+    }
+
+    build {
+        dependsOn(noKiteJar)
+    }
 }
 
 base {
@@ -117,8 +133,4 @@ fabricApi {
     configureDataGeneration {
         client = true
     }
-}
-
-tasks.test {
-    enabled = false
 }

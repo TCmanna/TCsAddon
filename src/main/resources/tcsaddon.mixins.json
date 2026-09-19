@@ -23,6 +23,7 @@
     "requireAnnotations": true
   },
   "client": [
+    "MixinChatComponent",
     "MixinClientLevel",
     "MixinEntityRenderer",
     "MixinMouseHandler",

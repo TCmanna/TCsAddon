@@ -20,6 +20,7 @@ import com.tcmanna.tcsaddon.features.impl.render.HideEntity
 import com.tcmanna.tcsaddon.features.impl.render.LittlefootESP
 import com.tcmanna.tcsaddon.features.impl.render.NameTag
 import com.tcmanna.tcsaddon.features.impl.rift.Auto4InARaw
+import com.tcmanna.tcsaddon.features.impl.rift.AutoUbiksCube
 import com.tcmanna.tcsaddon.features.impl.rift.VampireSlayer
 import com.tcmanna.tcsaddon.features.impl.skyblock.AntiNick
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoBeachBall
@@ -32,6 +33,7 @@ import com.tcmanna.tcsaddon.features.impl.skyblock.LeftClicker
 import com.tcmanna.tcsaddon.utils.RotationUtils
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.Minecraft
 import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvent
@@ -59,19 +61,23 @@ object TCsAddon : ClientModInitializer {
 
         // Register modules by adding to the list
         val moduleConfig = ModuleConfig("TCsAddon.json")
-        ModuleManager.registerModules(
-            moduleConfig,
-            LeftClicker, AutoFish, KillWorm, SpecProtect,
+
+        val modules = mutableListOf(LeftClicker, AutoFish, KillWorm, SpecProtect,
             Icant4, AutoCHPass, RandomMove, AutoSS, AntiNick,
             AutoCarnivalZombie, NameTag, HideEntity, AutoFusion,
             ChestESP, CorpseESP, GoldenFishNotif, LittlefootESP,
             AutoBeachBall, VampireSlayer, LagTracker, DisablePranks,
-            LeapMid, WheelLeapMenu, InputFix, HuntingHelper, AutoCarnivalFruit,
-            Auto4InARaw
+            LeapMid, WheelLeapMenu, InputFix, HuntingHelper, AutoUbiksCube
+        )
+        if (isSkyhanniLoaded) modules.add(AutoCarnivalFruit)
+        if (hasKite) modules.add(Auto4InARaw)
+
+        ModuleManager.registerModules(
+            moduleConfig, *modules.toTypedArray()
         )
         val debugUser = listOf("Paper_Flany", "MC_tianci", "TCmanna")
         if (debugUser.contains(Minecraft.getInstance().gameProfile.name))
-            ModuleManager.registerModules(moduleConfig, Debug, Farming)
+            ModuleManager.registerModules(moduleConfig, Debug, Farming, FarmingSwap)
     }
 
     @JvmStatic
@@ -79,4 +85,19 @@ object TCsAddon : ClientModInitializer {
         val fontFile = File(System.getenv("WINDIR"), "Fonts/msyh.ttc")
         return Font("Microsoft YaHei", fontFile.inputStream())
     }
+
+    private val hasKite = run {
+        try {
+            Class.forName(
+                "net.kite.api.Kite",
+                false,
+                Thread.currentThread().contextClassLoader
+            )
+            true
+        } catch (_: ClassNotFoundException) {
+            false
+        }
+    }
+
+    private val isSkyhanniLoaded = FabricLoader.getInstance().isModLoaded("skyhanni")
 }
