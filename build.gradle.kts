@@ -46,7 +46,7 @@ dependencies {
     compileOnly("me.shedaniel:RoughlyEnoughItems-fabric:26.1.819")
     compileOnly("com.github.skies-starred.library:library-26.1:010")
     compileOnly("foo.starred:snowbird:011+26.1")
-    compileOnly(files("libs/odin-client-0.2.3-r1+26.1.jar"))
+    compileOnly("com.tcmanna:odin-client:0.3.4-r1+26.1")
     implementation("com.github.hannibal002.SkyHanni:26.1:7.48.0")
     property("kite_version").let {
         implementation("io.github.tristan852:kite:$it")

@@ -36,8 +36,11 @@ import kotlinx.coroutines.launch
 import net.minecraft.client.gui.screens.InBedChatScreen
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.protocol.common.ServerboundCustomClickActionPacket
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket
+import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.Display
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
@@ -49,6 +52,7 @@ import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.Items
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import java.util.Optional
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -210,7 +214,15 @@ object HuntingHelper: Module(
                 }
             }
             if (autoHideyho && message == "Select an option: [Sure] [No thanks...] ") {
-                sendCommand("selectnpcoption hideyho r_4_1")
+                val payload = CompoundTag().apply {
+                    putString("npcId", "hideyho")
+                    putString("responseKey", "r_4_1")
+                }
+                val packet = ServerboundCustomClickActionPacket(
+                    Identifier.parse("skyblock:dialogue_response"),
+                    Optional.of(payload)
+                )
+                mc.connection?.send(packet)
             }
         }
 

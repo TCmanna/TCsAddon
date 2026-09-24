@@ -7,11 +7,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Pseudo
-@SuppressWarnings("all")
-@Mixin(targets = "foo.starred.odinclient.features.ImportantFeature$fn$1", remap = false)
+@Mixin(targets = "foo.starred.odinclient.features.ImportantFeature", remap = false)
 public class MixinImportantFeature {
 
-    @Inject(method = "invoke", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "fn", at = @At("HEAD"), cancellable = true)
     private void removeFn(CallbackInfo ci) {
         ci.cancel();
     }
