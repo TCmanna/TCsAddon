@@ -10,6 +10,8 @@ import com.odtheking.odin.events.MessageEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.PersonalBest
+import com.odtheking.odin.utils.handlers.TickTask
+import com.odtheking.odin.utils.handlers.schedule
 import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.sendCommand
@@ -44,7 +46,7 @@ object LagTracker: Module(
                 ticks = 0L
                 active = true
             }
-            else if (active && terminalCompleteRegex.matches(message)) {
+            if (active && terminalCompleteRegex.matches(message)) {
                 val wallSec = (System.currentTimeMillis() - startMs).toDouble() / 1000.0
                 val tickSec = ticks.toDouble() * 0.05
                 val lag = wallSec - tickSec
@@ -53,11 +55,14 @@ object LagTracker: Module(
                     val time = "%.2f".format(lag)
                     val msg = customMsg.replace("{time}", time)
 
-                    modMessage(msg, "§3Lag Tracker §8»§r ")
-                    val pbText = updateLagPB(lag.toFloat())
-                    if (sendLagToParty) sendCommand("pc ${msg.noControlCodes}${if (sendPBToParty) pbText else ""}")
+                    schedule(20) {
+                        modMessage(msg, "§3Lag Tracker §8»§r ")
+                        val pbText = updateLagPB(lag.toFloat())
+                        if (sendLagToParty) sendCommand("pc ${msg.noControlCodes}${if (sendPBToParty) pbText else ""}")
+                    }
                 }
             }
+
         }
 
         on<TickEvent.Server> {

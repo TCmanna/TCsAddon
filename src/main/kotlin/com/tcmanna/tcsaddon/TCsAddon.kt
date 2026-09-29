@@ -13,6 +13,7 @@ import com.tcmanna.tcsaddon.features.impl.boss.LeapMid
 import com.tcmanna.tcsaddon.features.impl.dungeon.LagTracker
 import com.tcmanna.tcsaddon.features.impl.dungeon.WheelLeapMenu
 import com.tcmanna.tcsaddon.features.impl.fishing.*
+import com.tcmanna.tcsaddon.features.impl.nether.AutoFillTap
 import com.tcmanna.tcsaddon.features.impl.render.ChestESP
 import com.tcmanna.tcsaddon.features.impl.render.CorpseESP
 import com.tcmanna.tcsaddon.features.impl.render.DisablePranks
@@ -22,7 +23,6 @@ import com.tcmanna.tcsaddon.features.impl.render.NameTag
 import com.tcmanna.tcsaddon.features.impl.rift.Auto4InARaw
 import com.tcmanna.tcsaddon.features.impl.rift.AutoUbiksCube
 import com.tcmanna.tcsaddon.features.impl.rift.VampireSlayer
-import com.tcmanna.tcsaddon.features.impl.skyblock.AntiNick
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoBeachBall
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoCarnivalFruit
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoCarnivalZombie
@@ -63,7 +63,7 @@ object TCsAddon : ClientModInitializer {
         val moduleConfig = ModuleConfig("TCsAddon.json")
 
         val modules = mutableListOf(LeftClicker, AutoFish, KillWorm, SpecProtect,
-            Icant4, AutoCHPass, RandomMove, AutoSS, AntiNick,
+            Icant4, AutoCHPass, RandomMove, AutoSS, AutoFillTap,
             AutoCarnivalZombie, NameTag, HideEntity, AutoFusion,
             ChestESP, CorpseESP, GoldenFishNotif, LittlefootESP,
             AutoBeachBall, VampireSlayer, LagTracker, DisablePranks,
