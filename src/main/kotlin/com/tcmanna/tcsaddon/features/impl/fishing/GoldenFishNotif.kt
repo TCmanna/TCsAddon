@@ -7,6 +7,7 @@ import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.alert
+import com.odtheking.odin.utils.handlers.schedule
 import com.tcmanna.tcsaddon.utils.Utils
 import org.lwjgl.glfw.GLFW
 
@@ -19,19 +20,9 @@ object GoldenFishNotif: Module(
     val forceFocus by BooleanSetting("Force Focus", true, "Auto refocus the game window.")
 
     const val TEXT = "You spot a Golden Fish surface from beneath the lava!"
-    var closeTick = 0
 
     init {
-        on<TickEvent.End> {
-            val player = mc.player?: return@on
 
-            if (closeTick > 0) {
-                closeTick--
-                if (closeTick == 0) {
-                    if (closeGui) Utils.closeCurrentScreen()
-                }
-            }
-        }
 
         on<MessageEvent.Chat> {
             if (message.trim() == TEXT) {
@@ -42,7 +33,11 @@ object GoldenFishNotif: Module(
                 }
 
                 alert("Golden Fish Spawned")
-                closeTick = 5
+                if (closeGui) {
+                    schedule(5) {
+                        Utils.closeCurrentScreen()
+                    }
+                }
             }
         }
     }

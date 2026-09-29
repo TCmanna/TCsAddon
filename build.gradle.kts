@@ -44,7 +44,6 @@ dependencies {
 
     compileOnly("com.github.Noamm9:NoammAddons:1.2.3:cheat")
     compileOnly("me.shedaniel:RoughlyEnoughItems-fabric:26.1.819")
-    compileOnly("com.github.skies-starred.library:library-26.1:010")
     compileOnly("foo.starred:snowbird:011+26.1")
     compileOnly("com.tcmanna:odin-client:0.3.4-r1+26.1")
     implementation("com.github.hannibal002.SkyHanni:26.1:7.48.0")

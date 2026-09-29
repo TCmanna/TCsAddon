@@ -1,6 +1,7 @@
-package com.tcmanna.tcsaddon.mixin.skiesstarredlibrary;
+package com.tcmanna.tcsaddon.mixin.snowbird;
 
 import com.tcmanna.tcsaddon.features.impl.render.DisablePranks;
+import foo.starred.snowbird.handlers.minecraft.AbstractWords;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import org.spongepowered.asm.mixin.Mixin;
@@ -8,7 +9,6 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.aerii.library.handlers.minecraft.AbstractWords;
 
 @Pseudo
 @Mixin(AbstractWords.class)

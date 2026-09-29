@@ -7,13 +7,12 @@
   "mixins": [
     "MixinLevelChunk",
     "noammaddons.MixinAutoSessionIdStealer",
+    "odin.MixinDungeonClass",
     "odin.MixinNVGRenderer",
     "odin.MixinShenanigans",
     "odinclient.MixinImportantFeature",
-    "skiesstarredlibrary.MixinAbstractWords",
-    "skiesstarredlibrary.MixinAbstractWordsNew",
-    "skiesstarredlibrary.MixinDonatorSize",
-    "skiesstarredlibrary.MixinDonatorSizeNew",
+    "snowbird.MixinAbstractWords",
+    "snowbird.MixinDonatorSize",
     "skyhanni.CarnivalFruitDiggingAccessor"
   ],
   "injectors": {

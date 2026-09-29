@@ -1,4 +1,4 @@
-package com.tcmanna.tcsaddon.mixin.skiesstarredlibrary;
+package com.tcmanna.tcsaddon.mixin.snowbird;
 
 import com.tcmanna.tcsaddon.features.impl.render.DisablePranks;
 import foo.starred.snowbird.internal.misc.DonatorSize;
@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Pseudo
 @Mixin(DonatorSize.class)
-public class MixinDonatorSizeNew {
+public class MixinDonatorSize {
     @Inject(method = "fn", at = @At("HEAD"), cancellable = true)
     private static void cancelFn(Player player, CallbackInfoReturnable<Boolean> cir) {
         if (DisablePranks.INSTANCE.getEnabled() && DisablePranks.INSTANCE.getStarredDonators()) cir.setReturnValue(false);

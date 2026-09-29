@@ -27,7 +27,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.startsWith("com.tcmanna.tcsaddon.mixin.skiesstarredlibrary")) {
+        if (mixinClassName.startsWith("com.tcmanna.tcsaddon.mixin.snowbird")) {
             return isAeriiLibraryPresent;
         }
         if (mixinClassName.startsWith("com.tcmanna.tcsaddon.mixin.odinclient")) {
