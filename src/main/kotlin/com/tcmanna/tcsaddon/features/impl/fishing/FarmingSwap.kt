@@ -11,6 +11,8 @@ import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.sendCommand
 import com.tcmanna.tcsaddon.events.ClientModMessage
 import com.tcmanna.tcsaddon.events.TickEventStart
+import com.tcmanna.tcsaddon.utils.TickAction
+import com.tcmanna.tcsaddon.utils.Utils
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 
 object FarmingSwap : Module(
@@ -23,7 +25,7 @@ object FarmingSwap : Module(
     private val farmingSetSlot by NumberSetting("Farming Set Slot", 4, 1, 12, 1, "")
     private val actionDelay by NumberSetting("Action Delay", 2, 1, 20, 1, "", "tick")
 
-    private var action: Action = WaitingAction
+    private var action: TickAction = WaitingAction
     private var tickDelay = 0
 
     const val YUCK = "YUCK! "
@@ -51,14 +53,9 @@ object FarmingSwap : Module(
         }
     }
 
-    private interface Action {
-        fun onModMessage(message: String) {}
-        fun onTickStart() {}
-        fun onScreenOpen(screen: AbstractContainerScreen<*>) {}
-        fun start() {}
-    }
 
-    private object WaitingAction : Action {
+
+    private object WaitingAction : TickAction {
         override fun onModMessage(message: String) {
             when {
                 message.startsWith(YUCK) -> {
@@ -74,7 +71,7 @@ object FarmingSwap : Module(
         }
     }
 
-    private class FarmingAction : Action {
+    private class FarmingAction : TickAction {
         private enum class Step {
             WAIT_LOADOUTS,
             CLICK_LOADOUT,
@@ -127,7 +124,7 @@ object FarmingSwap : Module(
                     tickDelay = actionDelay
 
                     mc.player?.clickSlot(
-                        loadoutIndexToSlotId(farmingSetSlot)
+                        Utils.loadoutIndexToSlotId(farmingSetSlot)
                     )
 
                     if (timeSwap) {
@@ -180,7 +177,7 @@ object FarmingSwap : Module(
         }
     }
 
-    private class PestAction : Action {
+    private class PestAction : TickAction {
         private enum class Step {
             WAIT_LOADOUTS,
             CLICK_LOADOUT,
@@ -234,7 +231,7 @@ object FarmingSwap : Module(
                     tickDelay = actionDelay
 
                     mc.player?.clickSlot(
-                        loadoutIndexToSlotId(pestSetSlot)
+                        Utils.loadoutIndexToSlotId(pestSetSlot)
                     )
 
                     if (timeSwap) {
@@ -295,23 +292,4 @@ object FarmingSwap : Module(
         }
     }
 
-    private fun loadoutIndexToSlotId(loadoutIndex: Int): Int {
-        return when (loadoutIndex) {
-            1 -> 14
-            2 -> 15
-            3 -> 16
-            4 -> 23
-            5 -> 24
-            6 -> 25
-            7 -> 32
-            8 -> 33
-            9 -> 34
-            10 -> 41
-            11 -> 42
-            12 -> 43
-            else -> throw IllegalArgumentException(
-                "Illegal loadoutIndex $loadoutIndex"
-            )
-        }
-    }
 }

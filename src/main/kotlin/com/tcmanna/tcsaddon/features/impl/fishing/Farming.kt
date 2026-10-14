@@ -6,6 +6,8 @@ import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Category
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.sendCommand
+import com.odtheking.odin.utils.skyblock.Island
+import com.odtheking.odin.utils.skyblock.LocationUtils
 import com.tcmanna.tcsaddon.events.TickEventStart
 import com.tcmanna.tcsaddon.mixin.accessors.KeyMappingAccessor
 import net.minecraft.client.KeyMapping
@@ -53,6 +55,11 @@ object Farming : Module(
 
     override fun onEnable() {
         super.onEnable()
+        if (!LocationUtils.isCurrentArea(Island.Garden)) {
+            this.toggle()
+            return
+        }
+
         lastBlockPos?.let { checkBlockPos(it)?.invoke() }
 
         val type = CropType.entries[cropType]

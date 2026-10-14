@@ -13,7 +13,10 @@ import com.tcmanna.tcsaddon.features.impl.boss.LeapMid
 import com.tcmanna.tcsaddon.features.impl.dungeon.LagTracker
 import com.tcmanna.tcsaddon.features.impl.dungeon.WheelLeapMenu
 import com.tcmanna.tcsaddon.features.impl.fishing.*
+import com.tcmanna.tcsaddon.features.impl.nether.AutoCloseCannon
 import com.tcmanna.tcsaddon.features.impl.nether.AutoFillTap
+import com.tcmanna.tcsaddon.features.impl.nether.AutoRend
+import com.tcmanna.tcsaddon.features.impl.nether.AutoRotate
 import com.tcmanna.tcsaddon.features.impl.render.ChestESP
 import com.tcmanna.tcsaddon.features.impl.render.CorpseESP
 import com.tcmanna.tcsaddon.features.impl.render.DisablePranks
@@ -27,6 +30,7 @@ import com.tcmanna.tcsaddon.features.impl.skyblock.AutoBeachBall
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoCarnivalFruit
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoCarnivalZombie
 import com.tcmanna.tcsaddon.features.impl.skyblock.AutoFusion
+import com.tcmanna.tcsaddon.features.impl.skyblock.FixSHDiana
 import com.tcmanna.tcsaddon.features.impl.skyblock.HuntingHelper
 import com.tcmanna.tcsaddon.features.impl.skyblock.InputFix
 import com.tcmanna.tcsaddon.features.impl.skyblock.LeftClicker
@@ -63,11 +67,12 @@ object TCsAddon : ClientModInitializer {
         val moduleConfig = ModuleConfig("TCsAddon.json")
 
         val modules = mutableListOf(LeftClicker, AutoFish, KillWorm, SpecProtect,
-            Icant4, AutoCHPass, RandomMove, AutoSS, AutoFillTap,
+            Icant4, AutoCHPass, RandomMove, AutoSS, FixSHDiana,
             AutoCarnivalZombie, NameTag, HideEntity, AutoFusion,
             ChestESP, CorpseESP, GoldenFishNotif, LittlefootESP,
             AutoBeachBall, VampireSlayer, LagTracker, DisablePranks,
-            LeapMid, WheelLeapMenu, InputFix, HuntingHelper, AutoUbiksCube
+            LeapMid, WheelLeapMenu, InputFix, HuntingHelper, AutoUbiksCube,
+            AutoFillTap, AutoRend, AutoRotate
         )
         if (isSkyhanniLoaded) modules.add(AutoCarnivalFruit)
         if (hasKite) modules.add(Auto4InARaw)

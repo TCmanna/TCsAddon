@@ -74,4 +74,24 @@ object Utils {
     }
 
     fun Vec3.toPos() = BlockPos(floor(x).toInt(), floor(y).toInt(), floor(z).toInt())
+
+    fun loadoutIndexToSlotId(loadoutIndex: Int): Int {
+        return when (loadoutIndex) {
+            1 -> 14
+            2 -> 15
+            3 -> 16
+            4 -> 23
+            5 -> 24
+            6 -> 25
+            7 -> 32
+            8 -> 33
+            9 -> 34
+            10 -> 41
+            11 -> 42
+            12 -> 43
+            else -> throw IllegalArgumentException(
+                "Illegal loadoutIndex $loadoutIndex"
+            )
+        }
+    }
 }

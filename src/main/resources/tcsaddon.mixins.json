@@ -11,9 +11,11 @@
     "odin.MixinNVGRenderer",
     "odin.MixinShenanigans",
     "odinclient.MixinImportantFeature",
+    "skyhanni.CarnivalFruitDiggingAccessor",
+    "skyhanni.MixinGuessEntry",
+    "skyhanni.MixinPreciseGuessBurrow",
     "snowbird.MixinAbstractWords",
-    "snowbird.MixinDonatorSize",
-    "skyhanni.CarnivalFruitDiggingAccessor"
+    "snowbird.MixinDonatorSize"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -30,7 +30,8 @@ object ChestESP: Module(
     var renderList: MutableList<BlockPos> = ArrayList()
     var lastClickTime = 0L
     var lastClickPos: BlockPos? = null
-    val chestCache = ConcurrentHashMap.newKeySet<ChestBlockEntity>()
+    @JvmStatic
+    val chestCache = mutableListOf<BlockPos>()
     var backDown = 0
 
     init {
@@ -44,7 +45,7 @@ object ChestESP: Module(
             }
 
             renderList.clear()
-            renderList.addAll(chestCache.map { it.blockPos })
+            renderList.addAll(chestCache)
 
             if (!autoOpen || LocationUtils.currentArea != Island.CrystalHollows) return@on
 
